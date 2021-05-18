@@ -2,3 +2,9 @@
 
 <title>Book club</title>
 <h1>Book club</h1>
+
+<ul>
+    {% for book in books %}
+    <li>{{ book[1] }} by {{ book[2] }}</li>
+    {% endfor %}
+</ul>
