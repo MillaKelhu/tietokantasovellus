@@ -3,6 +3,14 @@
 <title>Book club</title>
 <h1>Book club</h1>
 
+{% if session.user_id %}
+Hello <b>{{ session.username }}</b>!
+<a href="/logout">Log out</a>
+{% else %}
+<a href="/login" >Log in</a>
+<a href="/signin" >Sign in</a>
+{% endif %}
+
 <ul>
     {% for book in books %}
     <li>{{ book[1] }} by {{ book[2] }}</li>
