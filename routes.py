@@ -40,3 +40,8 @@ def signin():
 def logout():
     users_functions.log_out()
     return redirect("/")
+
+@app.route("/book/<id>")
+def book(id):
+    book = books_functions.get_book(id)
+    return render_template("book.html", book=book)

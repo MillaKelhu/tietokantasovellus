@@ -13,6 +13,6 @@ Hello <b>{{ session.username }}</b>!
 
 <ul>
     {% for book in books %}
-    <li>{{ book[1] }} by {{ book[2] }}</li>
+    <p><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</p>
     {% endfor %}
 </ul>
