@@ -36,3 +36,10 @@ CREATE TABLE ratings (
     book_id INTEGER REFERENCES books,
     rating INTEGER
 );
+
+CREATE TABLE booklist (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users,
+    book_id INTEGER REFERENCES books,
+    status INTEGER
+)
