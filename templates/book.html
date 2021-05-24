@@ -5,6 +5,15 @@
 <h3>by {{ book[2] }}</h3>
 <p><i>Published in {{ book[3] }}</i></p>
 
+<p>
+    {% if unread and session.user_id%}
+    <a href="/book/{{ book[0] }}/add" >Add to booklist</a>
+    {% endif %}
+    {% if unread == False and session.user_id  %}
+    You have added this book to <a href="/profile/booklist" >your booklist</a>!
+    {% endif %}
+</p>
+
 <p>{{ book[4] }}</p>
 
 <p><a href="/" >Back to front page</a></p>

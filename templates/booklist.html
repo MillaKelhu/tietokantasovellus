@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<title>Your booklist</title>
+<h1>Your booklist</h1>
+<a href="/profile/booklist/update" >Update booklist</a>
+<p><h3>Unread:</h3></p>
+<ul>
+    {% for book in booklist %}
+    {% if book[3] == 0 %}
+    <li><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</li>
+    {% endif %}
+    {% endfor %}
+</ul>
+<p><h3>Currently reading:</h3></p>
+<ul>
+    {% for book in booklist %}
+    {% if book[3] == 1 %}
+    <li><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</li>
+    {% endif %}
+    {% endfor %}
+</ul>
+<p><h3>You have read:</h3></p>
+<ul>
+    {% for book in booklist %}
+    {% if book[3] == 2 %}
+    <li><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</li>
+    {% endif %}
+    {% endfor %}
+</ul>
+<p><a href="/" >Back to front page</a></p>

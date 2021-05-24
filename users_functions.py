@@ -31,3 +31,10 @@ def sign_in(username, password, role):
         return True
     except:
         return False
+
+def get_user():
+    try:
+        user = (session["user_id"], session["username"], session["user_role"])
+        return user
+    except KeyError:
+        return None

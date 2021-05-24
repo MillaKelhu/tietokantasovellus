@@ -5,6 +5,7 @@
 
 {% if session.user_id %}
 Hello <b>{{ session.username }}</b>!
+<a href="/profile" >Your profile</a>
 <a href="/logout">Log out</a>
 {% else %}
 <a href="/login" >Log in</a>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<title>Your booklist</title>
+<h1>Your booklist</h1>
+<form action="/profile/booklist/update" method="POST">
+    <p><h3>Unread:</h3></p>
+    <ul>
+        {% for book in booklist %}
+        {% if book[3] == 0 %}
+        <p><input type="checkbox" name="reading" value="{{ book[0] }}">{{ book[1] }}</p>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    <p><h3>Currently reading:</h3></p>
+    <ul>
+        {% for book in booklist %}
+        {% if book[3] == 1 %}
+        <p><input type="checkbox" name="read" value="{{ book[0] }}">{{ book[1] }}</p>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    <p><h3>You have read:</h3></p>
+    <ul>
+        {% for book in booklist %}
+        {% if book[3] == 2 %}
+        <li>{{ book[1] }} by {{ book[2] }}</li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    <input type="submit" value="Save changes">
+</form>
+<p><a href="/" >Back to front page</a></p>
