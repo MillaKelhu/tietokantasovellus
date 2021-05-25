@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+
+<title>Delete {{ book[1] }}</title>
+
+Are you sure you want to delete book {{ book[1] }}?
+
+<p>
+    <a href="/book/{{ book[0] }}">No, go back to book</a>
+    <form action="/book/{{ book[0] }}/delete" method="POST">
+        <input type=submit value="Yes, delete book">
+    </form>
+</p>

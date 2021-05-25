@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<title>Modify book {{book[1]}}</title>
+
+<form action="/book/{{ book[0] }}/modify" method="POST">
+Title:
+<p>
+    <textarea name="title" rows="1" cols="50">{{ book[1] }}</textarea>
+</p>
+Author:
+<p>
+    <textarea name="author" rows="1" cols="50">{{ book[2] }}</textarea>
+</p>
+Year:
+<p>
+    <textarea name="year" rows="1" cols="50">{{ book[3] }}</textarea>
+</p>
+Description:
+<p>
+    <textarea name="description" rows="10" cols="50">{{ book[4] }}</textarea>
+</p>
+<input type="submit" value="Save changes">
+</form>
+
+<p><a href="/book/{{ book[0] }}" >Back to book</a></p>
