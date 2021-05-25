@@ -38,3 +38,6 @@ def get_user():
         return user
     except KeyError:
         return None
+
+def admin():
+    return bool(session["user_role"]==1)

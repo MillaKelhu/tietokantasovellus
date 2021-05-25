@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, redirect, request
-import books_functions, users_functions, booklist_functions
+import books_functions, users_functions, booklist_functions, review_functions
 
 @app.route("/")
 def index():
@@ -41,15 +41,36 @@ def logout():
     users_functions.log_out()
     return redirect("/")
 
-@app.route("/book/<id>")
+@app.route("/book/<id>", methods=["GET", "POST"])
 def book(id):
-    unread = True
+    in_list = False
+    read = False
     if users_functions.get_user():
         if booklist_functions.book_in_list(id):
-            unread = False
+            in_list = True
+
+        if booklist_functions.book_read(id):
+            read = True
+
+            if request.method=="POST":
+                if request.form["submit"] == "Rate book":
+                    rate = request.form["rating"]
+                    review_functions.add_rating(id, rate)
+    
+                if request.form["submit"] == "Write a comment":
+                    comment = request.form["comment"]
+                    if comment != "":
+                        review_functions.add_comment(id, comment)
 
     book = books_functions.get_book(id)
-    return render_template("book.html", book=book, unread=unread)
+    rating = review_functions.get_rating(id)[0]
+
+    if rating==None:
+        rating = "–"
+
+    comments = review_functions.get_comments(id)
+
+    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments)
 
 @app.route("/book/<id>/add", methods=["GET", "POST"])
 def book_add(id):
@@ -57,6 +78,36 @@ def book_add(id):
         booklist_functions.add_to_booklist(id)
         return redirect(f"/book/{id}")
     return redirect("/")
+
+@app.route("/book/<id>/delete", methods=["GET", "POST"])
+def book_delete(id):
+    if users_functions.admin():
+        book = books_functions.get_book(id)
+
+        if request.method=="POST":
+            books_functions.delete_book(id)
+            return redirect("/")
+        
+        return render_template("bookdelete.html", book=book)
+
+    return redirect(f"/book/{id}")
+
+@app.route("/book/<id>/modify", methods=["GET", "POST"])
+def book_modify(id):
+    if users_functions.admin():
+        book = books_functions.get_book(id)
+
+        if request.method=="POST":
+            title = request.form["title"]
+            author = request.form["author"]
+            year = request.form["year"]
+            description = request.form["description"]
+            books_functions.modify_book(id, author, title, year, description)
+            return redirect(f"/book/{id}")
+
+        return render_template("bookmodify.html", book=book)
+    
+    return redirect(f"/book/{id}")
 
 @app.route("/profile")
 def profile():
@@ -89,5 +140,34 @@ def profile_booklist_update():
 
         booklist = booklist_functions.get_booklist()
         return render_template("booklist_update.html", booklist=booklist)
+    else:
+        return redirect("/")
+
+@app.route("/addbook", methods=["GET", "POST"])
+def add_book():
+    if users_functions.admin():
+
+        if request.method == "POST":
+            title = request.form["title"]
+            author = request.form["author"]
+            year = request.form["year"]
+            description = request.form["description"]
+            books_functions.add_book(author, title, year, description)
+            return redirect("/")
+
+        return render_template("addbook.html")
+    else:
+        return redirect("/")
+
+@app.route("/addauthor", methods=["GET", "POST"])
+def add_author():
+    if users_functions.admin():
+
+        if request.method == "POST":
+            name = request.form["name"]
+            books_functions.add_author(name)
+            return redirect("/")
+
+        return render_template("addauthor.html")
     else:
         return redirect("/")

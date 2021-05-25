@@ -12,6 +12,14 @@ Hello <b>{{ session.username }}</b>!
 <a href="/signin" >Sign in</a>
 {% endif %}
 
+{% if session.user_role == 1 %}
+<p>
+    <a href="/addbook">Add book</a>
+    <a href="/addauthor">Add author</a>
+    <a href="/addgenre">Add genre</a>
+</p>
+{% endif %}
+
 <ul>
     {% for book in books %}
     <p><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</p>

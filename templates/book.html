@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 
 <title>{{ book[1] }}</title>
+
+{% if session.user_role==1 %}
+<a href="/book/{{ book[0] }}/delete">Delete book</a>
+<a href="/book/{{ book[0] }}/modify">Modify book</a>
+{% endif %}
+
 <h1>{{ book[1] }}</h1>
 <h3>by {{ book[2] }}</h3>
 <p><i>Published in {{ book[3] }}</i></p>
 
+<p>{{ rating }} / 5</p>
+
 <p>
-    {% if unread and session.user_id%}
+    {% if read and session.user_id %}
+    <form action="/book/{{ book[0] }}" method="POST">
+    <input type="radio" name="rating" value="1"> 1
+    <input type="radio" name="rating" value="2"> 2
+    <input type="radio" name="rating" value="3"> 3
+    <input type="radio" name="rating" value="4"> 4
+    <input type="radio" name="rating" value="5"> 5
+    <input type="submit" name="submit" value="Rate book">
+    </form>
+    {% endif %}
+</p>
+
+<p>
+    {% if in_list == False and session.user_id%}
     <a href="/book/{{ book[0] }}/add" >Add to booklist</a>
     {% endif %}
-    {% if unread == False and session.user_id  %}
+    {% if in_list and session.user_id  %}
     You have added this book to <a href="/profile/booklist" >your booklist</a>!
     {% endif %}
 </p>
@@ -17,3 +38,19 @@
 <p>{{ book[4] }}</p>
 
 <p><a href="/" >Back to front page</a></p>
+
+<h4>Comments:</h4>
+<p>
+    {% if read and session.user_id %}
+    <form action="/book/{{ book[0] }}" method="POST">
+        <p>
+            <textarea name="comment" rows="10" cols="50"></textarea>
+        </p>
+        <input type="submit" name="submit" value="Write a comment">
+    </form>
+    {% endif %}
+</p>
+{% for comment in comments %}
+<p><b>{{ comment[0] }} : </b></p>
+<p>{{ comment[1] }}</p>
+{% endfor %}

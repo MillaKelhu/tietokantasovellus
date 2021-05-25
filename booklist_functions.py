@@ -24,6 +24,14 @@ def book_in_list(book_id):
              AND book_id=:book_id"""
     return db.session.execute(sql, {"user_id":session["user_id"], "book_id":book_id}).fetchone()
 
+def book_read(book_id):
+    sql = """SELECT *
+             FROM booklist
+             WHERE user_id=:user_id
+             AND book_id=:book_id
+             AND status=2"""
+    return db.session.execute(sql, {"user_id":session["user_id"], "book_id":book_id}).fetchone()
+
 def mark_as_currently_reading(book_id):
     sql = """UPDATE booklist
              SET status=1
@@ -40,3 +48,8 @@ def mark_as_read(book_id):
     db.session.execute(sql, {"book_id":book_id, "user_id":session["user_id"]})
     db.session.commit()
     
+def book_deleted(book_id):
+    sql = """DELETE FROM booklist
+             WHERE book_id=:book_id"""
+    db.session.execute(sql, {"book_id":book_id})
+    db.session.commit()

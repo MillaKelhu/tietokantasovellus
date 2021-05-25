@@ -42,4 +42,15 @@ CREATE TABLE booklist (
     user_id INTEGER REFERENCES users,
     book_id INTEGER REFERENCES books,
     status INTEGER
+);
+
+CREATE TABLE genres (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE,
+);
+
+CREATE TABLE genrebooks (
+    id SERIAL PRIMARY KEY,
+    genre_id INTEGER REFERENCES genres,
+    book_id INTEGER REFERENCES books
 )
