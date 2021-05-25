@@ -18,11 +18,6 @@ CREATE TABLE books (
     description TEXT
 );
 
-CREATE TABLE categories (
-    id SERIAL PRIMARY KEY,
-    name TEXT
-);
-
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
@@ -47,10 +42,4 @@ CREATE TABLE booklist (
 CREATE TABLE genres (
     id SERIAL PRIMARY KEY,
     name TEXT UNIQUE,
-);
-
-CREATE TABLE genrebooks (
-    id SERIAL PRIMARY KEY,
-    genre_id INTEGER REFERENCES genres,
-    book_id INTEGER REFERENCES books
 )
