@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<title>Search</title>
+
+<form action="/search" method="POST">
+Title:
+<p>
+    <textarea name="title" rows="1" cols="50"></textarea>
+</p>
+Author:
+<p>
+    <textarea name="author" rows="1" cols="50"></textarea>
+</p>
+Year:
+<p>
+    <textarea name="year" rows="1" cols="50"></textarea>
+</p>
+Description:
+<p>
+    <textarea name="description" rows="1" cols="50"></textarea>
+</p>
+<input type="submit" value="Search">
+</form>
+
+<ul>
+    {% for book in books %}
+    <p><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</p>
+    {% endfor %}
+</ul>
+
+<p><a href="/" >Back to front page</a></p>

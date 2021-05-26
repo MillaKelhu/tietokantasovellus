@@ -68,3 +68,18 @@ def book_exists(author_id, title):
              WHERE title=:title
              AND author_id=:author_id"""
     return db.session.execute(sql, {"title":title, "author_id":author_id}).fetchone()
+
+def search_books(title, author, year, description):
+    sql = """SELECT b.id, b.title, a.name
+             FROM books b, authors a
+             WHERE b.title LIKE :title_query
+             AND a.name LIKE :author_query
+             AND b.author_id=a.id
+             AND b.year LIKE :year_query
+             AND b.description LIKE :description_query"""
+    return db.session.execute(sql, {
+        "title_query":"%"+title+"%",
+        "author_query":"%"+author+"%",
+        "year_query":year,
+        "description_query":"%"+description+"%",
+    }).fetchall()

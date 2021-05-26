@@ -20,6 +20,10 @@ Hello <b>{{ session.username }}</b>!
 </p>
 {% endif %}
 
+<p>
+    <a href="/search">Search books</a>
+</p>
+
 <ul>
     {% for book in books %}
     <p><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</p>

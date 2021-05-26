@@ -210,3 +210,24 @@ def genre(id):
     books = genre_functions.get_genre_books(id)
 
     return render_template("genre.html", genre=genre, books=books)
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    books = books_functions.get_all_books()
+
+    if request.method == "POST":
+        title = request.form["title"]
+        author = request.form["author"]
+        year = request.form["year"]
+        description = request.form["description"]
+        if title == "":
+            title = "%"
+        if author == "":
+            author = "%"
+        if year == "":
+            year = "%"
+        if description == "":
+            description = "%"
+        books = books_functions.search_books(title, author, year, description)
+
+    return render_template("search.html", books=books)
