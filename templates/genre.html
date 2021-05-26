@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<title>{{ genre }}</title>
+
+<h1>Books in genre "{{ genre }}"</h1>
+
+<ul>
+    {% for book in books %}
+    <p><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</p>
+    {% endfor %}
+</ul>

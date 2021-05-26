@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, redirect, request
-import books_functions, users_functions, booklist_functions, review_functions
+import books_functions, users_functions, booklist_functions, review_functions, genre_functions
 
 @app.route("/")
 def index():
@@ -69,8 +69,9 @@ def book(id):
         rating = "–"
 
     comments = review_functions.get_comments(id)
+    genres = genre_functions.get_genres(id)
 
-    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments)
+    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres)
 
 @app.route("/book/<id>/add", methods=["GET", "POST"])
 def book_add(id):
@@ -96,16 +97,26 @@ def book_delete(id):
 def book_modify(id):
     if users_functions.admin():
         book = books_functions.get_book(id)
+        genrelist = genre_functions.get_genres(id)
+        genres = ""
+        for nametuple in genrelist:
+            genres += ", " + nametuple[1]
+        genres = genres[2:]
 
         if request.method=="POST":
             title = request.form["title"]
             author = request.form["author"]
             year = request.form["year"]
             description = request.form["description"]
-            books_functions.modify_book(id, author, title, year, description)
+            genres = request.form["genres"]
+            if title != "" and author != "" and year != "" and description != "" and genres != "":
+                books_functions.modify_book(id, author, title, year, description)
+                genrelist = genre_functions.handle_tags(genres)
+                for genre in genrelist:
+                    genre_functions.assign_genre(id, genre)
             return redirect(f"/book/{id}")
 
-        return render_template("bookmodify.html", book=book)
+        return render_template("bookmodify.html", book=book, genres=genres)
     
     return redirect(f"/book/{id}")
 
@@ -152,7 +163,15 @@ def add_book():
             author = request.form["author"]
             year = request.form["year"]
             description = request.form["description"]
-            books_functions.add_book(author, title, year, description)
+            genres = request.form["genres"]
+            if title != "" and author != "" and year != "" and description != "" and genres != "":
+                books_functions.add_book(author, title, year, description)
+                genrelist = genre_functions.handle_tags(genres)
+                author_id = books_functions.author_exists(author)[0]
+                book_id = books_functions.book_exists(author_id, title)[0]
+                for genre in genrelist:
+                    genre_functions.assign_genre(book_id, genre)
+
             return redirect("/")
 
         return render_template("addbook.html")
@@ -171,3 +190,23 @@ def add_author():
         return render_template("addauthor.html")
     else:
         return redirect("/")
+
+@app.route("/addgenre", methods=["GET", "POST"])
+def add_genre():
+    if users_functions.admin():
+
+        if request.method == "POST":
+            name = request.form["name"]
+            genre_functions.add_genre(name)
+            return redirect("/")
+
+        return render_template("addgenre.html")
+    else:
+        return redirect("/")
+
+@app.route("/genres/<id>")
+def genre(id):
+    genre = genre_functions.get_genre_name(id)
+    books = genre_functions.get_genre_books(id)
+
+    return render_template("genre.html", genre=genre, books=books)

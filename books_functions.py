@@ -1,5 +1,6 @@
 from db import db
-from booklist_functions import book_deleted
+import booklist_functions
+import genre_functions
 
 def get_all_books():
     sql = """SELECT b.id, b.title, a.name 
@@ -26,7 +27,8 @@ def add_book(author_name, title, year, description):
     return False
 
 def delete_book(book_id):
-    book_deleted(book_id)
+    booklist_functions.book_deleted(book_id)
+    genre_functions.book_deleted(book_id)
     sql = """DELETE FROM books
              WHERE id=:book_id"""
     db.session.execute(sql, {"book_id":book_id})
@@ -51,11 +53,14 @@ def author_exists(author_name):
     return db.session.execute(sql, {"author_name":author_name}).fetchone()
 
 def add_author(author_name):
-    if author_exists(author_name) is None:
-        sql = """INSERT INTO authors(name)
-                 VALUES (:author_name)"""
+    sql = """INSERT INTO authors(name)
+             VALUES (:author_name)"""
+    try:
         db.session.execute(sql, {"author_name":author_name})
         db.session.commit()
+        return True
+    except:
+        return False
 
 def book_exists(author_id, title):
     sql = """SELECT *
