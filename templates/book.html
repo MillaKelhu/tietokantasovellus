@@ -61,6 +61,9 @@
     </form>
     {% endif %}
 </p>
+<p>
+    {{ error }}
+</p>
 {% for comment in comments %}
 <p><b>{{ comment[0] }} : </b></p>
 <p>{{ comment[1] }}</p>

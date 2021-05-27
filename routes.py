@@ -29,8 +29,11 @@ def signin():
         username = request.form["username"]
         password = request.form["password"]
 
-        if users_functions.sign_in(username, password, 0):
-            return redirect("/")
+        if 3 < len(username) < 15 and 4 < len(password) < 75:
+            if users_functions.sign_in(username, password, 0):
+                return redirect("/")
+            else:
+                error = "Username is taken"
         else:
             error = "Invalid input"
 
@@ -45,26 +48,31 @@ def logout():
 def book(id):
     in_list = False
     read = False
+    error=""
+
+    if request.method=="POST":
+        if request.form["submit"] == "Add to booklist":
+            status = request.form["booklist"]
+            booklist_functions.add_to_booklist(id, status)
+
+        if request.form["submit"] == "Rate book":
+            rate = request.form["rating"]
+            review_functions.add_rating(id, rate)
+
+        if request.form["submit"] == "Write a comment":
+            comment = request.form["comment"]
+            if comment != "":
+                if len(comment) < 500:
+                    review_functions.add_comment(id, comment)
+                else:
+                    error = "Keep comments under 500 characters, please"
+
     if users_functions.get_user():
         if booklist_functions.book_in_list(id):
             in_list = True
 
         if booklist_functions.book_read(id):
             read = True
-
-            if request.method=="POST":
-                if request.form["submit"] == "Add to booklist":
-                    status = request.form["booklist"]
-                    booklist_functions.add_to_booklist(id, status)
-
-                if request.form["submit"] == "Rate book":
-                    rate = request.form["rating"]
-                    review_functions.add_rating(id, rate)
-    
-                if request.form["submit"] == "Write a comment":
-                    comment = request.form["comment"]
-                    if comment != "":
-                        review_functions.add_comment(id, comment)
 
     book = books_functions.get_book(id)
     rating = review_functions.get_rating(id)[0]
@@ -75,7 +83,7 @@ def book(id):
     comments = review_functions.get_comments(id)
     genres = genre_functions.get_genres(id)
 
-    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres)
+    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres, error=error)
 
 @app.route("/book/<id>/delete", methods=["GET", "POST"])
 def book_delete(id):
