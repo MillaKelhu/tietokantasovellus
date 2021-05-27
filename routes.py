@@ -53,6 +53,10 @@ def book(id):
             read = True
 
             if request.method=="POST":
+                if request.form["submit"] == "Add to booklist":
+                    status = request.form["booklist"]
+                    booklist_functions.add_to_booklist(id, status)
+
                 if request.form["submit"] == "Rate book":
                     rate = request.form["rating"]
                     review_functions.add_rating(id, rate)
@@ -72,13 +76,6 @@ def book(id):
     genres = genre_functions.get_genres(id)
 
     return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres)
-
-@app.route("/book/<id>/add", methods=["GET", "POST"])
-def book_add(id):
-    if users_functions.get_user():
-        booklist_functions.add_to_booklist(id)
-        return redirect(f"/book/{id}")
-    return redirect("/")
 
 @app.route("/book/<id>/delete", methods=["GET", "POST"])
 def book_delete(id):

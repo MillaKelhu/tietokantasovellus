@@ -1,12 +1,12 @@
 from db import db
 from flask import session
 
-def add_to_booklist(book_id):
+def add_to_booklist(book_id, status):
     if book_in_list(book_id):
         return
     sql = """INSERT INTO booklist(user_id, book_id, status)
-             VALUES(:user_id, :book_id, 0)"""
-    db.session.execute(sql, {"user_id":session["user_id"], "book_id":book_id})
+             VALUES(:user_id, :book_id, :status)"""
+    db.session.execute(sql, {"user_id":session["user_id"], "book_id":book_id, "status":status})
     db.session.commit()
 
 def get_booklist():
