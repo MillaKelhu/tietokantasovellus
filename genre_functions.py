@@ -39,10 +39,6 @@ def book_deleted(book_id):
     db.session.execute(sql, {"book_id":book_id})
     db.session.commit()
 
-def handle_tags(string):
-    returns = list(string.split(", "))
-    return returns
-
 def get_genres(book_id):
     sql = """SELECT g.id, g.name
              FROM genres g, genrebooks b
@@ -63,3 +59,8 @@ def get_genre_books(genre_id):
              AND g.book_id=b.id
              AND b.author_id=a.id"""
     return db.session.execute(sql, {"genre_id":genre_id}).fetchall()
+
+def get_all_genres():
+    sql = """SELECT name 
+             FROM genres"""
+    return db.session.execute(sql).fetchall()

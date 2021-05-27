@@ -9,7 +9,12 @@ Title:
 </p>
 Author:
 <p>
-    <textarea name="author" rows="1" cols="50"></textarea>
+    {% for author in authors %}
+    <input type="radio" name="author" value="{{ author[0] }}" /> {{ author[0] }}
+    {% endfor %}
+</p>
+<p>
+    <a href="/addauthor">Add author</a>
 </p>
 Year:
 <p>
@@ -21,12 +26,16 @@ Description:
 </p>
 Genres:
 <p>
-    Separate genre tags with a comma, i.e. "drama, magical realism, classics"
+    {% for genre in genres %}
+    <input type="checkbox" name="genre" value="{{ genre[0] }}" /> {{ genre[0] }}
+    {% endfor %}
 </p>
 <p>
-    <textarea name="genres" rows="1" cols="50"></textarea>
+    <a href="/addgenre">Add genre</a>
+</p>
+<p>
+    {{ error }}
 </p>
 <input type="submit" value="Add book">
 </form>
-
 <p><a href="/" >Back to front page</a></p>

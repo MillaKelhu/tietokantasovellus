@@ -102,26 +102,30 @@ def book_delete(id):
 def book_modify(id):
     if users_functions.admin():
         book = books_functions.get_book(id)
-        genrelist = genre_functions.get_genres(id)
-        genres = ""
-        for nametuple in genrelist:
-            genres += ", " + nametuple[1]
-        genres = genres[2:]
+        og_author = book[2]
+        authors = books_functions.get_all_authors()
+        genres = genre_functions.get_all_genres()
+        og_genres = genre_functions.get_genres(id)
+        og_genres = [row[1] for row in og_genres]
+
+        error = ""
 
         if request.method=="POST":
             title = request.form["title"]
             author = request.form["author"]
             year = request.form["year"]
             description = request.form["description"]
-            genres = request.form["genres"]
+            genres = request.form.getlist("genre")
             if title != "" and author != "" and year != "" and description != "" and genres != "":
                 books_functions.modify_book(id, author, title, year, description)
-                genrelist = genre_functions.handle_tags(genres)
-                for genre in genrelist:
+                for genre in genres:
                     genre_functions.assign_genre(id, genre)
-            return redirect(f"/book/{id}")
+                return redirect(f"/book/{id}")
+            else:
+                error = "Do not leave empty fields!"
+            
 
-        return render_template("bookmodify.html", book=book, genres=genres)
+        return render_template("bookmodify.html", book=book, authors=authors, genres=genres, og_author=og_author, og_genres=og_genres, error=error)
     
     return redirect(f"/book/{id}")
 
@@ -162,24 +166,34 @@ def profile_booklist_update():
 @app.route("/addbook", methods=["GET", "POST"])
 def add_book():
     if users_functions.admin():
+        error = ""
 
         if request.method == "POST":
-            title = request.form["title"]
-            author = request.form["author"]
-            year = request.form["year"]
-            description = request.form["description"]
-            genres = request.form["genres"]
-            if title != "" and author != "" and year != "" and description != "" and genres != "":
-                books_functions.add_book(author, title, year, description)
-                genrelist = genre_functions.handle_tags(genres)
-                author_id = books_functions.author_exists(author)[0]
-                book_id = books_functions.book_exists(author_id, title)[0]
-                for genre in genrelist:
-                    genre_functions.assign_genre(book_id, genre)
+            title = request.form.get("title")
+            author = request.form.get("author")
+            year = request.form.get("year")
+            description = request.form.get("description")
+            genres = request.form.getlist("genre")
+            if title != None and author != None and year != None and description != None and genres != []:
+                
+                book_added = books_functions.add_book(author, title, year, description)
+                if book_added:
+                    author_id = books_functions.author_exists(author)
+                    book_id = books_functions.book_exists(author_id[0], title)[0]
+                    for genre in genres:
+                        genre_functions.assign_genre(book_id, genre)
 
-            return redirect("/")
+                    return redirect("/")
 
-        return render_template("addbook.html")
+                else:
+                    error = "Book not added"
+            else:
+                error = "Do not leave empty fields!"
+
+        authors = books_functions.get_all_authors()
+        genres = genre_functions.get_all_genres()
+
+        return render_template("addbook.html", authors=authors, genres=genres, error=error)
     else:
         return redirect("/")
 

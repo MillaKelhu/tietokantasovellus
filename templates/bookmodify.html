@@ -9,7 +9,16 @@ Title:
 </p>
 Author:
 <p>
-    <textarea name="author" rows="1" cols="50">{{ book[2] }}</textarea>
+    {% for author in authors %}
+    {% if author[0] == og_author %}
+    <input type="radio" name="author" value="{{ author[0] }}" checked/> {{ author[0] }}
+    {% else %}
+    <input type="radio" name="author" value="{{ author[0] }}" /> {{ author[0] }}
+    {% endif %}
+    {% endfor %}
+</p>
+<p>
+    <a href="/addauthor">Add author</a>
 </p>
 Year:
 <p>
@@ -21,10 +30,19 @@ Description:
 </p>
 Genres:
 <p>
-    Separate genre tags with a comma, i.e. "drama, magical realism, classics"
+    {% for genre in genres %}
+    {% if genre[0] in og_genres %}
+    <input type="checkbox" name="genre" value="{{ genre[0] }}" checked/> {{ genre[0] }}
+    {% else %}
+    <input type="checkbox" name="genre" value="{{ genre[0] }}" /> {{ genre[0] }}
+    {% endif %}
+    {% endfor %}
 </p>
 <p>
-    <textarea name="genres" rows="1" cols="50">{{ genres }}</textarea>
+    <a href="/addgenre">Add genre</a>
+</p>
+<p>
+    {{ error }}
 </p>
 <input type="submit" value="Save changes">
 </form>

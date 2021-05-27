@@ -16,12 +16,12 @@ def get_book(book_id):
     return db.session.execute(sql, {"id":int(book_id)}).fetchone()
 
 def add_book(author_name, title, year, description):
-    author_id = author_exists(author_name)[0]
-    if author_id:
-        if book_exists(author_id, title) is None:
+    author = author_exists(author_name)
+    if author:
+        if book_exists(author[0], title) is None:
             sql = """INSERT INTO books(author_id, title, year, description)
                      VALUES (:author_id, :title, :year, :description)"""
-            db.session.execute(sql, {"author_id":author_id, "title":title, "year": year, "description":description})
+            db.session.execute(sql, {"author_id":author[0], "title":title, "year": year, "description":description})
             db.session.commit()
             return True
     return False
@@ -61,6 +61,11 @@ def add_author(author_name):
         return True
     except:
         return False
+
+def get_all_authors():
+    sql = """SELECT name 
+             FROM authors"""
+    return db.session.execute(sql).fetchall()
 
 def book_exists(author_id, title):
     sql = """SELECT *
