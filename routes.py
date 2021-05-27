@@ -101,29 +101,28 @@ def book_delete(id):
 @app.route("/book/<id>/modify", methods=["GET", "POST"])
 def book_modify(id):
     if users_functions.admin():
-        book = books_functions.get_book(id)
-        og_author = book[2]
-        authors = books_functions.get_all_authors()
-        genres = genre_functions.get_all_genres()
-        og_genres = genre_functions.get_genres(id)
-        og_genres = [row[1] for row in og_genres]
-
         error = ""
 
         if request.method=="POST":
-            title = request.form["title"]
-            author = request.form["author"]
-            year = request.form["year"]
-            description = request.form["description"]
+            title = request.form.get("title")
+            author = request.form.get("author")
+            year = request.form.get("year")
+            description = request.form.get("description")
             genres = request.form.getlist("genre")
-            if title != "" and author != "" and year != "" and description != "" and genres != "":
+            if title != None and author != None and year != None and description != None and genres != []:
                 books_functions.modify_book(id, author, title, year, description)
                 for genre in genres:
                     genre_functions.assign_genre(id, genre)
                 return redirect(f"/book/{id}")
             else:
                 error = "Do not leave empty fields!"
-            
+
+        book = books_functions.get_book(id)
+        og_author = book[2]
+        authors = books_functions.get_all_authors()
+        genres = genre_functions.get_all_genres()
+        og_genres = genre_functions.get_genres(id)
+        og_genres = [row[1] for row in og_genres]
 
         return render_template("bookmodify.html", book=book, authors=authors, genres=genres, og_author=og_author, og_genres=og_genres, error=error)
     
