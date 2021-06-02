@@ -88,7 +88,7 @@ def search_books(title, author, year, description, genrestring=None, minrating=0
                                          FROM genres g, genrebooks x
                                          WHERE g.id=x.genre_id
                                          AND b.id=x.book_id)
-             AND :minrating < (SELECT ROUND(AVG(rating), 2)
+             AND :minrating <= (SELECT ROUND(AVG(rating), 2)
                               FROM ratings
                               WHERE book_id=b.id)"""
         return db.session.execute(sql, {
@@ -106,7 +106,7 @@ def search_books(title, author, year, description, genrestring=None, minrating=0
          AND b.author_id=a.id
          AND b.year LIKE :year_query
          AND b.description LIKE :description_query
-         AND :minrating < (SELECT ROUND(AVG(rating), 2)
+         AND :minrating <= (SELECT ROUND(AVG(rating), 2)
                           FROM ratings
                           WHERE book_id=b.id)"""
     return db.session.execute(sql, {
