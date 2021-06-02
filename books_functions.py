@@ -74,17 +74,45 @@ def book_exists(author_id, title):
              AND author_id=:author_id"""
     return db.session.execute(sql, {"title":title, "author_id":author_id}).fetchone()
 
-def search_books(title, author, year, description):
-    sql = """SELECT b.id, b.title, a.name
+def search_books(title, author, year, description, genrestring=None, minrating=0):
+    if genrestring:
+        genres = genre_functions.tag_handler(genrestring)
+        sql = """SELECT b.id, b.title, a.name
              FROM books b, authors a
              WHERE b.title LIKE :title_query
              AND a.name LIKE :author_query
              AND b.author_id=a.id
              AND b.year LIKE :year_query
-             AND b.description LIKE :description_query"""
-    return db.session.execute(sql, {
+             AND b.description LIKE :description_query
+             AND :genres <@ ARRAY(SELECT g.name 
+                                         FROM genres g, genrebooks x
+                                         WHERE g.id=x.genre_id
+                                         AND b.id=x.book_id)
+             AND :minrating < (SELECT ROUND(AVG(rating), 2)
+                              FROM ratings
+                              WHERE book_id=b.id)"""
+        return db.session.execute(sql, {
         "title_query":"%"+title+"%",
         "author_query":"%"+author+"%",
         "year_query":year,
         "description_query":"%"+description+"%",
+        "genres":genres,
+        "minrating":minrating
+        }).fetchall()
+    sql = """SELECT b.id, b.title, a.name
+         FROM books b, authors a
+         WHERE b.title LIKE :title_query
+         AND a.name LIKE :author_query
+         AND b.author_id=a.id
+         AND b.year LIKE :year_query
+         AND b.description LIKE :description_query
+         AND :minrating < (SELECT ROUND(AVG(rating), 2)
+                          FROM ratings
+                          WHERE book_id=b.id)"""
+    return db.session.execute(sql, {
+    "title_query":"%"+title+"%",
+    "author_query":"%"+author+"%",
+    "year_query":year,
+    "description_query":"%"+description+"%",
+    "minrating":minrating
     }).fetchall()

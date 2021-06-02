@@ -24,7 +24,6 @@ def is_rated(book_id):
              AND book_id=:book_id"""
     return db.session.execute(sql, {"user_id":session["user_id"], "book_id":book_id}).fetchone()
     
-
 def change_rating(book_id, rating):
     sql = """UPDATE ratings
              SET rating=:rating

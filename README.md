@@ -14,8 +14,8 @@ Sovelluksen suunnitellut toiminnallisuudet on listattu alla, ja toteutetut toimi
   - [x] kirjailijan
   - [x] julkaisuvuoden
   - [x] kuvauksen 
-  - [ ] genren ja/tai
-  - [ ] tähtiluokituksen perusteella
+  - [x] genren ja/tai
+  - [x] tähtiluokituksen perusteella
 - [x] Ylläpitäjä voi lisätä, muokata tai poistaa kirjoja.
 - [x] Ylläpitäjä voi luoda genrejä ja luokitella kirjoja niihin. Kirja kuuluu aina vähintään yhteen genreen.
 - [ ] Ylläpitäjä voi tarvittaessa poistaa peruskäyttäjän antaman arvion, peruskäyttäjän oikeuden arvioida tai kommentoida kirjoja, tai peruskäyttäjän koko tilin.

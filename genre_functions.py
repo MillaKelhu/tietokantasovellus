@@ -64,3 +64,6 @@ def get_all_genres():
     sql = """SELECT name 
              FROM genres"""
     return db.session.execute(sql).fetchall()
+
+def tag_handler(string):
+    return string.split(", ")
