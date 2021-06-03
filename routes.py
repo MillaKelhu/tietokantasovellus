@@ -256,3 +256,34 @@ def search():
         books = books_functions.search_books(title, author, year, description, genres, minrating)
 
     return render_template("search.html", books=books)
+
+@app.route("/users")
+def users():
+    if users_functions.admin():
+
+        users = users_functions.get_all_users()
+
+        return render_template("users.html", users=users)
+    else:
+        return redirect("/")
+
+@app.route("/users/<id>", methods=["GET", "POST"])
+def user(id):
+    if users_functions.admin():
+
+        if request.method == "POST":
+            if request.form["submit"] == "Return rights to comment":
+                users_functions.return_rights(id)
+
+            if request.form["submit"] == "Revoke rights to comment":
+                users_functions.revoke_rights(id)
+
+            if request.form["submit"] == "Delete user":
+                users_functions.delete_user(id)
+                return redirect("/users")
+
+        user = users_functions.get_user_by_id(id)
+
+        return render_template("user.html", user=user)
+    else:
+        return redirect("/")

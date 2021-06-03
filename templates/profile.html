@@ -4,11 +4,16 @@
 <h1>Your profile</h1>
 <p>Username: {{user[1]}}</p>
 <p>Role: 
-    {% if session.user_role==0 %}
+    {% if session.user_role==0 or session.user_role==-1 %}
     regular user
     {% endif %}
     {% if session.user_role==1 %}
     admin
+    {% endif %}
+</p>
+<p>
+    {% if session.user_role==(-1) %}
+    Note: You right to comment has been revoked.
     {% endif %}
 </p>
 <a href="/profile/booklist" >Your booklist</a>

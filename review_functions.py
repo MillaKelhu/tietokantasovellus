@@ -51,3 +51,13 @@ def delete_comment(comment_id):
              WHERE id=:id"""
     db.session.execute(sql, {"id":comment_id})
     db.session.commit()
+
+def user_deleted(user_id):
+    sql = """DELETE FROM ratings
+             WHERE user_id=:user_id"""
+    db.session.execute(sql, {"user_id":user_id})
+    db.session.commit()
+    sql = """DELETE FROM comments
+             WHERE user_id=:user_id"""
+    db.session.execute(sql, {"user_id":user_id})
+    db.session.commit()

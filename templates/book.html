@@ -52,7 +52,7 @@
 
 <h4>Comments:</h4>
 <p>
-    {% if read and session.user_id %}
+    {% if read and session.user_id and session.user_role>(-1) %}
     <form action="/book/{{ book[0] }}" method="POST">
         <p>
             <textarea name="comment" rows="10" cols="50"></textarea>
@@ -60,16 +60,13 @@
         <input type="submit" name="submit" value="Write a comment">
     </form>
     {% endif %}
+    {% if session.user_role==(-1) %}
+    You right to comment has been revoked.
+    {% endif %}
 </p>
 <p>
     {{ error }}
 </p>
-{% if session.user_role==0 %}
-{% for comment in comments %}
-<p><b>{{ comment[0] }} : </b></p>
-<p>{{ comment[1] }}</p>
-{% endfor %}
-{% endif %}
 
 {% if session.user_role==1 %}
 <form action="/book/{{ book[0] }}" method="POST">
@@ -79,4 +76,9 @@
 {% endfor %}
 <input type="submit" name="submit" value="Delete comments">
 </form>
+{% else %}
+{% for comment in comments %}
+<p><b>{{ comment[0] }} : </b></p>
+<p>{{ comment[1] }}</p>
+{% endfor %}
 {% endif %}

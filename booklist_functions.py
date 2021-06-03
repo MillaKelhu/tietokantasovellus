@@ -53,3 +53,9 @@ def book_deleted(book_id):
              WHERE book_id=:book_id"""
     db.session.execute(sql, {"book_id":book_id})
     db.session.commit()
+
+def user_deleted(user_id):
+    sql = """DELETE FROM booklist
+             WHERE user_id=:user_id"""
+    db.session.execute(sql, {"user_id":user_id})
+    db.session.commit()

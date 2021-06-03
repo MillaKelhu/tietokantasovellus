@@ -18,9 +18,10 @@ Sovelluksen suunnitellut toiminnallisuudet on listattu alla, ja toteutetut toimi
   - [x] tähtiluokituksen perusteella
 - [x] Ylläpitäjä voi lisätä, muokata tai poistaa kirjoja.
 - [x] Ylläpitäjä voi luoda genrejä ja luokitella kirjoja niihin. Kirja kuuluu aina vähintään yhteen genreen.
-- [ ] Ylläpitäjä voi tarvittaessa poistaa 
+- [x] Ylläpitäjä voi tarvittaessa poistaa 
   - [x] peruskäyttäjän kommentin
-  - [ ] peruskäyttäjän kommentoida kirjoja
-  - [ ]  peruskäyttäjän koko tilin
+  - [x] peruskäyttäjän kommentoida kirjoja
+  - [x]  peruskäyttäjän koko tilin
+- [x] Ylläpitäjä voi tarvittaesa palauttaa peruskäyttäjän oikeuden kommentoida kirjoja
 
 Sovellus on testattavissa [Herokussa](https://tsoha2021-bookclub.herokuapp.com/). Ylläpitäjälle kuuluvia toiminnallisuuksia voi testata käyttäjätilillä, jonka tunnus on _admin0_ ja salasana _salasana_.
