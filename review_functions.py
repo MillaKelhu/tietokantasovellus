@@ -33,7 +33,7 @@ def change_rating(book_id, rating):
     db.session.commit()
 
 def get_comments(book_id):
-    sql = """SELECT u.username, c.comment
+    sql = """SELECT u.username, c.comment, c.id
              FROM users u, comments c
              WHERE c.book_id=:book_id
              AND c.user_id=u.id
@@ -44,4 +44,10 @@ def add_comment(book_id, comment):
     sql = """INSERT INTO comments(user_id, book_id, comment)
              VALUES(:user_id, :book_id, :comment)"""
     db.session.execute(sql, {"user_id":session["user_id"], "book_id":book_id, "comment":comment})
+    db.session.commit()
+
+def delete_comment(comment_id):
+    sql = """DELETE FROM comments
+             WHERE id=:id"""
+    db.session.execute(sql, {"id":comment_id})
     db.session.commit()

@@ -67,6 +67,11 @@ def book(id):
                 else:
                     error = "Keep comments under 500 characters, please"
 
+        if request.form["submit"] == "Delete comments":
+            comment_ids = request.form.getlist("comment_id")
+            for comment_id in comment_ids:
+                review_functions.delete_comment(comment_id)
+
     if users_functions.get_user():
         if booklist_functions.book_in_list(id):
             in_list = True
