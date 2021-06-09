@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<title>User {{ user[0] }}</title>
+
+<form action="/users/{{ user[0] }}" method="POST">
+<p>User {{ user[0] }}</p>
+<p>Username: {{user[1]}}</p>
+<p>Role: 
+    {% if user[2]==(-1) %}
+    regular user (limited rights)
+    <p><input type="submit" name="submit" value="Return rights to comment"></p>
+    {% endif %}
+    {% if user[2]==0 %}
+    regular user
+    <p><input type="submit" name="submit" value="Revoke rights to comment"></p>
+    {% endif %}
+    {% if user[2]==1 %}
+    admin
+    {% endif %}
+</p>
+{% if user[2]!=1 %}
+<p><input type="submit" name="submit" value="Delete user"></p>
+{% endif %}
+</form>
+
+<p><a href="/users" >Back to users</a></p>
+<p><a href="/" >Back to front page</a></p>

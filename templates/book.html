@@ -48,6 +48,13 @@
     {% endfor %}
 </p>
 
+
+<p>Others who have read this book have also read:</p>
+{% for recommendation in recommendations %}
+<a href="/book/ {{ recommendation[0] }}">{{ recommendation[1] }}</a>
+{% endfor %}
+
+
 <p><a href="/" >Back to front page</a></p>
 
 <h4>Comments:</h4>

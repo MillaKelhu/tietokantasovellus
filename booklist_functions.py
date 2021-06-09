@@ -59,3 +59,16 @@ def user_deleted(user_id):
              WHERE user_id=:user_id"""
     db.session.execute(sql, {"user_id":user_id})
     db.session.commit()
+
+def similar_books(book_id):
+    sql = """SELECT b.id, b.title 
+             FROM booklist x, books b 
+             WHERE x.user_id IN (
+                                 SELECT user_id 
+                                 FROM booklist 
+                                 WHERE book_id=:book_id 
+                                 AND status=2) 
+             AND x.status=2 
+             AND x.book_id<>7 
+             AND b.id=x.book_id"""
+    return db.session.execute(sql, {"book_id":book_id}).fetchall()

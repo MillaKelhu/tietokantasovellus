@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+
+<title>Users</title>
+
+{% for user in users %}
+<p><a href="/users/{{ user[0] }}">{{ user[1] }}</a></p>
+{% endfor %}
+
+<p><a href="/" >Back to front page</a></p>

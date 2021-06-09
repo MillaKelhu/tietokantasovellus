@@ -87,8 +87,9 @@ def book(id):
 
     comments = review_functions.get_comments(id)
     genres = genre_functions.get_genres(id)
+    recommendations = booklist_functions.similar_books(id)
 
-    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres, error=error)
+    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres, error=error, recommendations=recommendations)
 
 @app.route("/book/<id>/delete", methods=["GET", "POST"])
 def book_delete(id):
