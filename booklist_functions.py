@@ -63,13 +63,13 @@ def user_deleted(user_id):
 def similar_books(book_id):
     sql = """SELECT b.id, b.title 
              FROM booklist x, books b 
-             WHERE x.user_id IN (
-                                 SELECT user_id 
+             WHERE x.user_id IN (SELECT user_id 
                                  FROM booklist 
                                  WHERE book_id=:book_id 
                                  AND status=2) 
              AND x.status=2 
              AND x.book_id<>:book_id 
              AND b.id=x.book_id
-             GROUP BY b.id"""
+             GROUP BY b.id
+             ORDER BY COUNT(x.book_id) DESC"""
     return db.session.execute(sql, {"book_id":book_id}).fetchall()
