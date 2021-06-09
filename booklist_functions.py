@@ -69,7 +69,7 @@ def similar_books(book_id):
                                  WHERE book_id=:book_id 
                                  AND status=2) 
              AND x.status=2 
-             AND x.book_id<>7 
+             AND x.book_id<>:book_id 
              AND b.id=x.book_id
              GROUP BY b.id"""
     return db.session.execute(sql, {"book_id":book_id}).fetchall()
