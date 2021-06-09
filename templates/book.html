@@ -48,11 +48,12 @@
     {% endfor %}
 </p>
 
-
+{% if len(recommendations) > 0 %}
 <p>Others who have read this book have also read:</p>
 {% for recommendation in recommendations %}
 <a href="/book/ {{ recommendation[0] }}">{{ recommendation[1] }}</a>
 {% endfor %}
+{% endif %}
 
 
 <p><a href="/" >Back to front page</a></p>
