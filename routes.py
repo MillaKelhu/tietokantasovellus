@@ -247,7 +247,8 @@ def search():
     if request.method == "POST":
         title = request.form["title"]
         author = request.form["author"]
-        year = request.form["year"]
+        earliest_year = request.form["earliest_year"]
+        latest_year = request.form["latest_year"]
         description = request.form["description"]
         genres = request.form["genres"]
         minrating = request.form["rating"]
@@ -255,11 +256,9 @@ def search():
             title = "%"
         if author == "":
             author = "%"
-        if year == "":
-            year = "%"
         if description == "":
             description = "%"
-        books = books_functions.search_books(title, author, year, description, genres, minrating)
+        books = books_functions.search_books(title, author, earliest_year, latest_year, description, genres, minrating)
 
     return render_template("search.html", books=books, year_now=year_now)
 

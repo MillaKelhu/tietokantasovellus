@@ -1,6 +1,7 @@
 from db import db
 import booklist_functions
 import genre_functions
+import review_functions
 
 def get_all_books():
     sql = """SELECT b.id, b.title, a.name 
@@ -30,6 +31,7 @@ def add_book(author_name, title, year, description):
 def delete_book(book_id):
     booklist_functions.book_deleted(book_id)
     genre_functions.book_deleted(book_id)
+    review_functions.book_deleted(book_id)
     sql = """DELETE FROM books
              WHERE id=:book_id"""
     db.session.execute(sql, {"book_id":book_id})
@@ -76,7 +78,7 @@ def book_exists(author_id, title):
              AND author_id=:author_id"""
     return db.session.execute(sql, {"title":title, "author_id":author_id}).fetchone()
 
-def search_books(title, author, year, description, genrestring=None, minrating=0):
+def search_books(title, author, earliest_year, latest_year, description, genrestring=None, minrating=0):
     if genrestring:
         genres = genre_functions.tag_handler(genrestring)
         sql = """SELECT b.id, b.title, a.name
@@ -84,7 +86,7 @@ def search_books(title, author, year, description, genrestring=None, minrating=0
              WHERE b.title LIKE :title_query
              AND a.name LIKE :author_query
              AND b.author_id=a.id
-             AND b.year LIKE :year_query
+             AND b.year BETWEEN :earliest_year_query AND :latest_year_query
              AND b.description LIKE :description_query
              AND :genres <@ ARRAY(SELECT g.name 
                                          FROM genres g, genrebooks x
@@ -96,7 +98,8 @@ def search_books(title, author, year, description, genrestring=None, minrating=0
         return db.session.execute(sql, {
         "title_query":"%"+title+"%",
         "author_query":"%"+author+"%",
-        "year_query":year,
+        "earliest_year_query":earliest_year,
+        "latest_year_query":latest_year,
         "description_query":"%"+description+"%",
         "genres":genres,
         "minrating":minrating
@@ -106,7 +109,7 @@ def search_books(title, author, year, description, genrestring=None, minrating=0
          WHERE b.title LIKE :title_query
          AND a.name LIKE :author_query
          AND b.author_id=a.id
-         AND b.year LIKE :year_query
+         AND b.year BETWEEN :earliest_year_query AND :latest_year_query
          AND b.description LIKE :description_query
          AND :minrating <= (SELECT COALESCE(ROUND(AVG(r.rating), 2), 0) 
                             FROM books b LEFT JOIN ratings r ON b.id=r.book_id 
@@ -114,7 +117,8 @@ def search_books(title, author, year, description, genrestring=None, minrating=0
     return db.session.execute(sql, {
     "title_query":"%"+title+"%",
     "author_query":"%"+author+"%",
-    "year_query":year,
+    "earliest_year_query":earliest_year,
+    "latest_year_query":latest_year,
     "description_query":"%"+description+"%",
     "minrating":minrating
     }).fetchall()

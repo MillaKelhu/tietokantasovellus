@@ -11,14 +11,34 @@ Author:
 <p>
     <textarea name="author" rows="1" cols="50"></textarea>
 </p>
-Year:
+Year at least:
 <p>
-    <select name="year">
+    <select name="earliest_year">
         {% for i in range(-2100,year_now+1) %}
         {% if 0 > i %}
+        {% if i == -2100 %}
         <option value={{ i }} selected>{{ i*(-1) }} BCE</option>
+        {% else %}
+        <option value={{ i }}>{{ i*(-1) }} BCE</option>
+        {% endif %}
         {% else%}
         <option value={{ i }}>{{ i }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</p>
+Year at latest:
+<p>
+    <select name="latest_year">
+        {% for i in range(-2100,year_now+1) %}
+        {% if 0 > i %}
+        <option value={{ i }}>{{ i*(-1) }} BCE</option>
+        {% else%}
+        {% if i == year_now %}
+        <option value={{ i }} selected>{{ i }}</option>
+        {% else %}
+        <option value={{ i }}>{{ i }}</option>
+        {% endif %}
         {% endif %}
         {% endfor %}
     </select>

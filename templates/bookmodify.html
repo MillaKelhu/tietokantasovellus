@@ -5,7 +5,7 @@
 <form action="/book/{{ book[0] }}/modify" method="POST">
 Title:
 <p>
-    <textarea name="title" rows="1" cols="50">{{ book[1] }}</textarea>
+    <input type="text" placeholder="{{ book[1] }}" name="title">
 </p>
 Author:
 <p>
@@ -27,13 +27,13 @@ Year:
     <select name="year">
         {% for i in range(-2100,year_now+1) %}
         {% if 0 > i %}
-        {% if i == og_year %}
+        {% if i == book[3] %}
         <option value={{ i }} selected>{{ i*(-1) }} BCE</option>
         {% else %}
         <option value={{ i }}>{{ i*(-1) }} BCE</option>
         {% endif %}
         {% else%}
-        {% if i == og_year %}
+        {% if i == book[3] %}
         <option value={{ i }} selected>{{ i }}</option>
         {% else %}
         <option value={{ i }}>{{ i }}</option>
