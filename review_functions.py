@@ -18,7 +18,7 @@ def add_rating(book_id, rating):
         db.session.commit()
 
 def is_rated(book_id):
-    sql = """SELECT *
+    sql = """SELECT id
              FROM ratings
              WHERE user_id=:user_id
              AND book_id=:book_id"""

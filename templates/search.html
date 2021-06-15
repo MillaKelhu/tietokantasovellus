@@ -5,26 +5,34 @@
 <form action="/search" method="POST">
 Title:
 <p>
-    <input type="text" name="title">
+    <textarea name="title" rows="1" cols="50"></textarea>
 </p>
 Author:
 <p>
-    <input type="text" name="author">
+    <textarea name="author" rows="1" cols="50"></textarea>
 </p>
 Year:
 <p>
-    <input type="text" name="year">
+    <select name="year">
+        {% for i in range(-2100,year_now+1) %}
+        {% if 0 > i %}
+        <option value={{ i }} selected>{{ i*(-1) }} BCE</option>
+        {% else%}
+        <option value={{ i }}>{{ i }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
 </p>
 Description:
 <p>
-    <input type="text" name="description">
+    <textarea name="description" rows="1" cols="50"></textarea>
 </p>
 Genres:
 <p>
     Separate text with commas, i.e. "Drama, Magical realism, Historical"
 </p>
 <p>
-    <input type="text" name="genres">
+    <textarea name="genres" rows="1" cols="50"></textarea>
 </p>
 Rating at least:
 <p>

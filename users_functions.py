@@ -5,7 +5,9 @@ import booklist_functions
 import review_functions
 
 def log_in(username, password):
-    sql = "SELECT * FROM users WHERE username=:username"
+    sql = """SELECT id, username, password, role 
+             FROM users 
+             WHERE username=:username"""
     user = db.session.execute(sql, {"username":username}).fetchone()
     if user:
         hash_value = user[2]

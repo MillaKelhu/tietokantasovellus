@@ -9,20 +9,38 @@ Title:
 </p>
 Author:
 <p>
-    {% for author in authors %}
-    {% if author[0] == og_author %}
-    <input type="radio" name="author" value="{{ author[0] }}" checked/> {{ author[0] }}
-    {% else %}
-    <input type="radio" name="author" value="{{ author[0] }}" /> {{ author[0] }}
-    {% endif %}
-    {% endfor %}
+    <select name="author">
+        {% for author in authors %}
+        {% if author[0] == og_author %}
+        <option value="{{ author[0] }}" selected>{{ author[0] }}</option>
+        {% else %}
+        <option value="{{ author[0] }}">{{ author[0] }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
 </p>
 <p>
     <a href="/addauthor">Add author</a>
 </p>
 Year:
 <p>
-    <textarea name="year" rows="1" cols="50">{{ book[3] }}</textarea>
+    <select name="year">
+        {% for i in range(-2100,year_now+1) %}
+        {% if 0 > i %}
+        {% if i == og_year %}
+        <option value={{ i }} selected>{{ i*(-1) }} BCE</option>
+        {% else %}
+        <option value={{ i }}>{{ i*(-1) }} BCE</option>
+        {% endif %}
+        {% else%}
+        {% if i == og_year %}
+        <option value={{ i }} selected>{{ i }}</option>
+        {% else %}
+        <option value={{ i }}>{{ i }}</option>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+    </select>
 </p>
 Description:
 <p>

@@ -18,7 +18,7 @@ def get_booklist():
     return db.session.execute(sql, {"user_id":session["user_id"]}).fetchall()
 
 def book_in_list(book_id):
-    sql = """SELECT *
+    sql = """SELECT id
              FROM booklist
              WHERE user_id=:user_id
              AND book_id=:book_id"""

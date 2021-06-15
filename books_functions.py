@@ -5,7 +5,8 @@ import genre_functions
 def get_all_books():
     sql = """SELECT b.id, b.title, a.name 
              FROM books b, authors a 
-             WHERE b.author_id=a.id"""
+             WHERE b.author_id=a.id
+             ORDER BY a.name ASC, b.title ASC"""
     return db.session.execute(sql).fetchall()
 
 def get_book(book_id):
@@ -64,11 +65,12 @@ def add_author(author_name):
 
 def get_all_authors():
     sql = """SELECT name 
-             FROM authors"""
+             FROM authors
+             ORDER BY name ASC"""
     return db.session.execute(sql).fetchall()
 
 def book_exists(author_id, title):
-    sql = """SELECT *
+    sql = """SELECT id
              FROM books
              WHERE title=:title
              AND author_id=:author_id"""

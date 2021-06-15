@@ -11,7 +11,7 @@ def add_genre(name):
         return False
 
 def get_genre(name):
-    sql = """SELECT *
+    sql = """SELECT id, name
              FROM genres
              WHERE name=:name"""
     return db.session.execute(sql, {"name":name}).fetchone()
@@ -27,7 +27,7 @@ def assign_genre(book_id, genre_name):
 def genre_assigned(book_id, genre_name):
     genre = get_genre(genre_name)
     if genre:
-        sql = """SELECT *
+        sql = """SELECT id, genre_id, book_id
                  FROM genrebooks
                  WHERE genre_id=:genre_id
                  AND book_id=:book_id"""
@@ -43,7 +43,8 @@ def get_genres(book_id):
     sql = """SELECT g.id, g.name
              FROM genres g, genrebooks b
              WHERE g.id=b.genre_id
-             AND b.book_id=:book_id"""
+             AND b.book_id=:book_id
+             ORDER BY g.name ASC"""
     return db.session.execute(sql, {"book_id":book_id}).fetchall()
 
 def get_genre_name(genre_id):
@@ -57,12 +58,14 @@ def get_genre_books(genre_id):
              FROM books b, genrebooks g, authors a
              WHERE g.genre_id=:genre_id
              AND g.book_id=b.id
-             AND b.author_id=a.id"""
+             AND b.author_id=a.id
+             ORDER BY a.name ASC, b.title ASC"""
     return db.session.execute(sql, {"genre_id":genre_id}).fetchall()
 
 def get_all_genres():
     sql = """SELECT name 
-             FROM genres"""
+             FROM genres
+             ORDER BY name ASC"""
     return db.session.execute(sql).fetchall()
 
 def tag_handler(string):

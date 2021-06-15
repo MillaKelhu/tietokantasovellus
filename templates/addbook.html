@@ -5,20 +5,30 @@
 <form action="/addbook" method="POST">
 Title:
 <p>
-    <input type="text" name="title">
+    <textarea name="title" rows="1" cols="50"></textarea>
 </p>
 Author:
 <p>
-    {% for author in authors %}
-    <input type="radio" name="author" value="{{ author[0] }}" /> {{ author[0] }}
-    {% endfor %}
+    <select name="author">
+        {% for author in authors %}
+        <option value="{{ author[0] }}">{{ author[0] }}</option>
+        {% endfor %}
+    </select>
 </p>
 <p>
     <a href="/addauthor">Add author</a>
 </p>
 Year:
 <p>
-    <input type="text" name="year">
+    <select name="year">
+        {% for i in range(-2100,year_now+1) %}
+        {% if 0 > i %}
+        <option value={{ i }}>{{ i*(-1) }} BCE</option>
+        {% else%}
+        <option value={{ i }}>{{ i }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
 </p>
 Description:
 <p>

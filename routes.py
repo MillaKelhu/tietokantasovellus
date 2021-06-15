@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, redirect, request
-import books_functions, users_functions, booklist_functions, review_functions, genre_functions
+import books_functions, users_functions, booklist_functions, review_functions, genre_functions, datetime
 
 @app.route("/")
 def index():
@@ -81,6 +81,7 @@ def book(id):
 
     book = books_functions.get_book(id)
     rating = review_functions.get_rating(id)[0]
+    year = int(book[3])
 
     if rating==None:
         rating = "–"
@@ -89,7 +90,7 @@ def book(id):
     genres = genre_functions.get_genres(id)
     recommendations = booklist_functions.similar_books(id)
 
-    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres, error=error, recommendations=recommendations)
+    return render_template("book.html", book=book, year=year, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres, error=error, recommendations=recommendations)
 
 @app.route("/book/<id>/delete", methods=["GET", "POST"])
 def book_delete(id):
@@ -108,6 +109,7 @@ def book_delete(id):
 def book_modify(id):
     if users_functions.admin():
         error = ""
+        year_now = datetime.datetime.now().year
 
         if request.method=="POST":
             title = request.form.get("title")
@@ -125,12 +127,13 @@ def book_modify(id):
 
         book = books_functions.get_book(id)
         og_author = book[2]
+        og_year = int(book[3])
         authors = books_functions.get_all_authors()
         genres = genre_functions.get_all_genres()
         og_genres = genre_functions.get_genres(id)
         og_genres = [row[1] for row in og_genres]
 
-        return render_template("bookmodify.html", book=book, authors=authors, genres=genres, og_author=og_author, og_genres=og_genres, error=error)
+        return render_template("bookmodify.html", book=book, og_year=og_year, authors=authors, genres=genres, og_author=og_author, og_genres=og_genres, error=error, year_now=year_now)
     
     return redirect(f"/book/{id}")
 
@@ -172,6 +175,7 @@ def profile_booklist_update():
 def add_book():
     if users_functions.admin():
         error = ""
+        year_now = datetime.datetime.now().year
 
         if request.method == "POST":
             title = request.form.get("title")
@@ -198,7 +202,7 @@ def add_book():
         authors = books_functions.get_all_authors()
         genres = genre_functions.get_all_genres()
 
-        return render_template("addbook.html", authors=authors, genres=genres, error=error)
+        return render_template("addbook.html", authors=authors, genres=genres, error=error, year_now=year_now)
     else:
         return redirect("/")
 
@@ -238,6 +242,7 @@ def genre(id):
 @app.route("/search", methods=["GET", "POST"])
 def search():
     books = books_functions.get_all_books()
+    year_now = datetime.datetime.now().year
 
     if request.method == "POST":
         title = request.form["title"]
@@ -256,7 +261,7 @@ def search():
             description = "%"
         books = books_functions.search_books(title, author, year, description, genres, minrating)
 
-    return render_template("search.html", books=books)
+    return render_template("search.html", books=books, year_now=year_now)
 
 @app.route("/users")
 def users():
