@@ -78,9 +78,8 @@ def book_exists(author_id, title):
              AND author_id=:author_id"""
     return db.session.execute(sql, {"title":title, "author_id":author_id}).fetchone()
 
-def search_books(title, author, earliest_year, latest_year, description, genrestring=None, minrating=0):
-    if genrestring:
-        genres = genre_functions.tag_handler(genrestring)
+def search_books(title, author, earliest_year, latest_year, description, genres, minrating=0):
+    if genres != []:
         sql = """SELECT b.id, b.title, a.name
              FROM books b, authors a
              WHERE b.title LIKE :title_query

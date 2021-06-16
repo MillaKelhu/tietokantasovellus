@@ -37,7 +37,8 @@
 Genres:
 <p>
     {% for genre in genres %}
-    <input type="checkbox" name="genre" value="{{ genre[0] }}" /> {{ genre[0] }}
+    <input type="checkbox" name="genre" value="{{ genre[0] }}" id="{{ genre[0] }}"/>
+    <label for={{ genre[0] }}>{{ genre[0] }}</label>
     {% endfor %}
 </p>
 <p>

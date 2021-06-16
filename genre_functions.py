@@ -67,6 +67,4 @@ def get_all_genres():
              FROM genres
              ORDER BY name ASC"""
     return db.session.execute(sql).fetchall()
-
-def tag_handler(string):
-    return string.split(", ")
+    

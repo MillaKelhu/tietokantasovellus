@@ -49,7 +49,10 @@ Year at latest:
 </p>
 Genres:
 <p>
-    Separate text with commas, i.e. "Drama, Magical realism, Historical"
+    {% for genre in genres %}
+    <input type="checkbox" name="genre" value="{{ genre[0] }}" id="{{ genre[0] }}"/>
+    <label for={{ genre[0] }}>{{ genre[0] }}</label>
+    {% endfor %}
 </p>
 <p>
     <textarea name="genres" rows="1" cols="50"></textarea>

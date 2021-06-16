@@ -274,7 +274,7 @@ def search():
         earliest_year = request.form["earliest_year"]
         latest_year = request.form["latest_year"]
         description = request.form["description"]
-        genres = request.form["genres"]
+        genres = request.form.getlist("genre")
         minrating = request.form["rating"]
         if title == "":
             title = "%"
@@ -284,7 +284,9 @@ def search():
             description = "%"
         books = books_functions.search_books(title, author, earliest_year, latest_year, description, genres, minrating)
 
-    return render_template("search.html", books=books, year_now=year_now)
+    genres = genre_functions.get_all_genres()
+
+    return render_template("search.html", books=books, year_now=year_now, genres=genres)
 
 @app.route("/users")
 def users():

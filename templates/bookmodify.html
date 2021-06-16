@@ -50,9 +50,11 @@ Genres:
 <p>
     {% for genre in genres %}
     {% if genre[0] in og_genres %}
-    <input type="checkbox" name="genre" value="{{ genre[0] }}" checked/> {{ genre[0] }}
+    <input type="checkbox" name="genre" value="{{ genre[0] }}" id="{{ genre[0] }}" checked/>
+    <label for={{ genre[0] }}>{{ genre[0] }}</label>
     {% else %}
-    <input type="checkbox" name="genre" value="{{ genre[0] }}" /> {{ genre[0] }}
+    <input type="checkbox" name="genre" value="{{ genre[0] }}" id="{{ genre[0] }}"/>
+    <label for={{ genre[0] }}>{{ genre[0] }}</label>
     {% endif %}
     {% endfor %}
 </p>
