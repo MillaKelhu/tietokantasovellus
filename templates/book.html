@@ -9,7 +9,7 @@
 
 <h1>{{ book[1] }}</h1>
 <h3>by {{ book[2] }}</h3>
-{% if year > 0 %}
+{% if book[3] > 0 %}
 <p><i>Published in {{ book[3] }}</i></p>
 {% else %}
 <p><i>Published in {{ book[3]*(-1) }} BCE</i></p>

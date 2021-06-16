@@ -116,13 +116,19 @@ def book_modify(id):
             year = request.form.get("year")
             description = request.form.get("description")
             genres = request.form.getlist("genre")
-            if title != None and author != None and year != None and description != None and genres != []:
-                books_functions.modify_book(id, author, title, year, description)
-                for genre in genres:
-                    genre_functions.assign_genre(id, genre)
-                return redirect(f"/book/{id}")
+            if 1 < len(title) < 100:
+                if 9 < len(description) < 1000: 
+                    if genres != []:
+                        books_functions.modify_book(id, author, title, year, description)
+                        for genre in genres:
+                            genre_functions.assign_genre(id, genre)
+                        return redirect(f"/book/{id}")
+                    else:
+                        error = "You must choose at least 1 genre!"
+                else:
+                    error = "Description must be 10-999 characters long."
             else:
-                error = "Do not leave empty fields!"
+                error = "Title must be 2-99 characters long."
 
         book = books_functions.get_book(id)
         og_author = book[2]
