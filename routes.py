@@ -32,7 +32,7 @@ def signin():
         if 2 < len(username) < 16:
             if 4 < len(password) < 100:
                 if users_functions.sign_in(username, password, 0):
-                    return redirect("/")
+                    return redirect("/login")
                 else:
                     error = "Username is taken"
             else:
