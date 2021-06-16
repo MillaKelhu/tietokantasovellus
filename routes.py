@@ -29,13 +29,16 @@ def signin():
         username = request.form["username"]
         password = request.form["password"]
 
-        if 3 < len(username) < 15 and 4 < len(password) < 75:
-            if users_functions.sign_in(username, password, 0):
-                return redirect("/")
+        if 2 < len(username) < 16:
+            if 4 < len(password) < 100:
+                if users_functions.sign_in(username, password, 0):
+                    return redirect("/")
+                else:
+                    error = "Username is taken"
             else:
-                error = "Username is taken"
+                error = "Password must be 5-99 characters long!"
         else:
-            error = "Invalid input"
+            error = "Username must be 3-15 characters long!"
 
     return render_template("signin.html", error=error)
 

@@ -3,13 +3,13 @@
 <title>Search</title>
 
 <form action="/search" method="POST">
-Title:
+<label for="title">Title:</label>
 <p>
-    <textarea name="title" rows="1" cols="50"></textarea>
+    <input type="text" name="title" id="title">
 </p>
-Author:
+<label for="author">Author:</label>
 <p>
-    <textarea name="author" rows="1" cols="50"></textarea>
+    <input type="text" name="author" id="author">
 </p>
 Year at least:
 <p>
@@ -43,9 +43,9 @@ Year at latest:
         {% endfor %}
     </select>
 </p>
-Description:
+<label for="description">Description:</label>
 <p>
-    <textarea name="description" rows="1" cols="50"></textarea>
+    <input type="text" name="description" id="description">
 </p>
 Genres:
 <p>
