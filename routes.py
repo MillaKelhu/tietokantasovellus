@@ -219,13 +219,17 @@ def add_book():
 @app.route("/addauthor", methods=["GET", "POST"])
 def add_author():
     if users_functions.admin():
+        error = ""
 
         if request.method == "POST":
             name = request.form["name"]
-            books_functions.add_author(name)
-            return redirect("/")
+            if 3 < len(name) < 100:
+                books_functions.add_author(name)
+                return redirect("/")
+            else:
+                error = "Author's name must be 4-99 characters long."
 
-        return render_template("addauthor.html")
+        return render_template("addauthor.html", error=error)
     else:
         return redirect("/")
 
@@ -235,10 +239,13 @@ def add_genre():
 
         if request.method == "POST":
             name = request.form["name"]
-            genre_functions.add_genre(name)
-            return redirect("/")
+            if 1 < len(name) < 51:
+                genre_functions.add_genre(name)
+                return redirect("/")
+            else:
+                error = "Genre's name must be 2-50 characters long."
 
-        return render_template("addgenre.html")
+        return render_template("addgenre.html", error=error)
     else:
         return redirect("/")
 
