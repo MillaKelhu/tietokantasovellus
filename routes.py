@@ -28,13 +28,17 @@ def signin():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        password_again = request.form["password_again"]
 
         if 2 < len(username) < 16:
             if 4 < len(password) < 100:
-                if users_functions.sign_in(username, password, 0):
-                    return redirect("/login")
+                if password == password_again:
+                    if users_functions.sign_in(username, password, 0):
+                        return redirect("/login")
+                    else:
+                        error = "Username is taken"
                 else:
-                    error = "Username is taken"
+                    error = "Passwords don't match!"
             else:
                 error = "Password must be 5-99 characters long!"
         else:

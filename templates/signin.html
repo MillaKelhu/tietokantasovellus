@@ -2,7 +2,7 @@
 
 <title>Sign in</title>
 
-<h4>Sign in</h4>
+<h2>Sign in</h2>
 
 <form action="/signin" method="POST">
     <p>
@@ -12,6 +12,10 @@
     <p>
         <label for="password">Password:</label>
         <input type="password" name="password" id="password">
+    </p>
+    <p>
+        <label for="password_again">Password again:</label>
+        <input type="password" name="password_again" id="password_again">
     </p>
     <p>
         {{ error }}
