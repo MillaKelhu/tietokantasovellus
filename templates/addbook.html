@@ -3,13 +3,13 @@
 <title>Add book</title>
 
 <form action="/addbook" method="POST">
-Title:
+<label for="title">Title:</label>
 <p>
-    <input type="text" name="title">
+    <input type="text" name="title" id="title">
 </p>
-Author:
+<label for="author">Author:</label>
 <p>
-    <select name="author">
+    <select name="author" id="author">
         {% for author in authors %}
         <option value="{{ author[0] }}">{{ author[0] }}</option>
         {% endfor %}
@@ -18,9 +18,9 @@ Author:
 <p>
     <a href="/addauthor">Add author</a>
 </p>
-Year:
+<label for="year">Year:</label>
 <p>
-    <select name="year">
+    <select name="year" id="year">
         {% for i in range(-2100,year_now+1) %}
         {% if 0 > i %}
         <option value={{ i }}>{{ i*(-1) }} BCE</option>
@@ -30,9 +30,9 @@ Year:
         {% endfor %}
     </select>
 </p>
-Description:
+<label for="description">Description:</label>
 <p>
-    <textarea name="description" rows="10" cols="50"></textarea>
+    <textarea name="description" id="description" rows="10" cols="50"></textarea>
 </p>
 Genres:
 <p>

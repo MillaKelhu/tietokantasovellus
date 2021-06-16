@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<title>Add book</title>
+<title>Add author</title>
 
 <form action="/addauthor" method="POST">
-Name:
+<label for="name">Author's name:</label>
 <p>
-    <input type="text" name="name">
+    <input type="text" name="name" id="name">
 </p>
 <p>
     {{ error }}
