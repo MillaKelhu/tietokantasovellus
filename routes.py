@@ -81,7 +81,6 @@ def book(id):
 
     book = books_functions.get_book(id)
     rating = review_functions.get_rating(id)[0]
-    year = int(book[3])
 
     if rating==None:
         rating = "–"
@@ -90,7 +89,7 @@ def book(id):
     genres = genre_functions.get_genres(id)
     recommendations = booklist_functions.similar_books(id)
 
-    return render_template("book.html", book=book, year=year, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres, error=error, recommendations=recommendations)
+    return render_template("book.html", book=book, in_list=in_list, read=read, rating=rating, comments=comments, genres=genres, error=error, recommendations=recommendations)
 
 @app.route("/book/<id>/delete", methods=["GET", "POST"])
 def book_delete(id):
@@ -127,13 +126,12 @@ def book_modify(id):
 
         book = books_functions.get_book(id)
         og_author = book[2]
-        og_year = int(book[3])
         authors = books_functions.get_all_authors()
         genres = genre_functions.get_all_genres()
         og_genres = genre_functions.get_genres(id)
         og_genres = [row[1] for row in og_genres]
 
-        return render_template("bookmodify.html", book=book, og_year=og_year, authors=authors, genres=genres, og_author=og_author, og_genres=og_genres, error=error, year_now=year_now)
+        return render_template("bookmodify.html", book=book, authors=authors, genres=genres, og_author=og_author, og_genres=og_genres, error=error, year_now=year_now)
     
     return redirect(f"/book/{id}")
 
@@ -183,21 +181,27 @@ def add_book():
             year = request.form.get("year")
             description = request.form.get("description")
             genres = request.form.getlist("genre")
-            if title != None and author != None and year != None and description != None and genres != []:
-                
-                book_added = books_functions.add_book(author, title, year, description)
-                if book_added:
-                    author_id = books_functions.author_exists(author)
-                    book_id = books_functions.book_exists(author_id[0], title)[0]
-                    for genre in genres:
-                        genre_functions.assign_genre(book_id, genre)
+            if 1 < len(title) < 100:
+                if 9 < len(description) < 1000: 
+                    if genres != []:
+                        
+                        book_added = books_functions.add_book(author, title, year, description)
+                        if book_added:
+                            author_id = books_functions.author_exists(author)
+                            book_id = books_functions.book_exists(author_id[0], title)[0]
+                            for genre in genres:
+                                genre_functions.assign_genre(book_id, genre)
 
-                    return redirect("/")
+                            return redirect("/")
 
+                        else:
+                            error = "Book not added"
+                    else:
+                        error = "You must choose at least 1 genre!"
                 else:
-                    error = "Book not added"
+                    error = "Description must be 10-999 characters long."
             else:
-                error = "Do not leave empty fields!"
+                error = "Title must be 2-99 characters long."
 
         authors = books_functions.get_all_authors()
         genres = genre_functions.get_all_genres()
