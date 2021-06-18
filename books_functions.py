@@ -82,11 +82,11 @@ def search_books(title, author, earliest_year, latest_year, description, genres,
     if genres != []:
         sql = """SELECT b.id, b.title, a.name
              FROM books b, authors a
-             WHERE b.title LIKE :title_query
-             AND a.name LIKE :author_query
+             WHERE LOWER(b.title) LIKE :title_query
+             AND LOWER(a.name) LIKE :author_query
              AND b.author_id=a.id
              AND b.year BETWEEN :earliest_year_query AND :latest_year_query
-             AND b.description LIKE :description_query
+             AND LOWER(b.description) LIKE :description_query
              AND :genres <@ ARRAY(SELECT g.name 
                                          FROM genres g, genrebooks x
                                          WHERE g.id=x.genre_id
@@ -95,29 +95,29 @@ def search_books(title, author, earliest_year, latest_year, description, genres,
                                 FROM books b LEFT JOIN ratings r ON b.id=r.book_id 
                                 WHERE book_id=b.id)"""
         return db.session.execute(sql, {
-        "title_query":"%"+title+"%",
-        "author_query":"%"+author+"%",
+        "title_query":"%"+title.lower()+"%",
+        "author_query":"%"+author.lower()+"%",
         "earliest_year_query":earliest_year,
         "latest_year_query":latest_year,
-        "description_query":"%"+description+"%",
+        "description_query":"%"+description.lower()+"%",
         "genres":genres,
         "minrating":minrating
         }).fetchall()
     sql = """SELECT b.id, b.title, a.name
          FROM books b, authors a
-         WHERE b.title LIKE :title_query
-         AND a.name LIKE :author_query
+         WHERE LOWER(b.title) LIKE :title_query
+         AND LOWER(a.name) LIKE :author_query
          AND b.author_id=a.id
          AND b.year BETWEEN :earliest_year_query AND :latest_year_query
-         AND b.description LIKE :description_query
+         AND LOWER(b.description) LIKE :description_query
          AND :minrating <= (SELECT COALESCE(ROUND(AVG(r.rating), 2), 0) 
                             FROM books b LEFT JOIN ratings r ON b.id=r.book_id 
                             WHERE book_id=b.id)"""
     return db.session.execute(sql, {
-    "title_query":"%"+title+"%",
-    "author_query":"%"+author+"%",
+    "title_query":"%"+title.lower()+"%",
+    "author_query":"%"+author.lower()+"%",
     "earliest_year_query":earliest_year,
     "latest_year_query":latest_year,
-    "description_query":"%"+description+"%",
+    "description_query":"%"+description.lower()+"%",
     "minrating":minrating
     }).fetchall()
