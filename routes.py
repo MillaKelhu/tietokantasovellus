@@ -252,8 +252,12 @@ def add_genre():
         if request.method == "POST":
             name = request.form["name"]
             if 1 < len(name) < 51:
-                genre_functions.add_genre(name)
-                return redirect("/")
+                genre_added = genre_functions.add_genre(name)
+                if genre_added:
+                    return redirect("/")
+                
+                else:
+                    error = "Genre already exists."
             else:
                 error = "Genre's name must be 2-50 characters long."
 
