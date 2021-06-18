@@ -51,7 +51,8 @@ def admin():
 
 def get_all_users():
     sql = """SELECT id, username 
-             FROM users"""
+             FROM users
+             ORDER BY username ASC"""
     return db.session.execute(sql).fetchall()
 
 def get_user_by_id(id):

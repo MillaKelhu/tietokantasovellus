@@ -1,71 +1,109 @@
 <!DOCTYPE html>
 
-<title>Modify book {{book[1]}}</title>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/main.css">
+    <title>Modify book {{book[1]}}</title>
+</head>
 
-<form action="/book/{{ book[0] }}/modify" method="POST">
-Title:
-<p>
-    <input type="text" placeholder="{{ book[1] }}" name="title">
-</p>
-Author:
-<p>
-    <select name="author">
-        {% for author in authors %}
-        {% if author[0] == og_author %}
-        <option value="{{ author[0] }}" selected>{{ author[0] }}</option>
-        {% else %}
-        <option value="{{ author[0] }}">{{ author[0] }}</option>
-        {% endif %}
-        {% endfor %}
-    </select>
-</p>
-<p>
-    <a href="/addauthor">Add author</a>
-</p>
-Year:
-<p>
-    <select name="year">
-        {% for i in range(-2100,year_now+1) %}
-        {% if 0 > i %}
-        {% if i == book[3] %}
-        <option value={{ i }} selected>{{ i*(-1) }} BCE</option>
-        {% else %}
-        <option value={{ i }}>{{ i*(-1) }} BCE</option>
-        {% endif %}
-        {% else%}
-        {% if i == book[3] %}
-        <option value={{ i }} selected>{{ i }}</option>
-        {% else %}
-        <option value={{ i }}>{{ i }}</option>
-        {% endif %}
-        {% endif %}
-        {% endfor %}
-    </select>
-</p>
-Description:
-<p>
-    <textarea name="description" rows="10" cols="50">{{ book[4] }}</textarea>
-</p>
-Genres:
-<p>
-    {% for genre in genres %}
-    {% if genre[0] in og_genres %}
-    <input type="checkbox" name="genre" value="{{ genre[0] }}" id="{{ genre[0] }}" checked/>
-    <label for={{ genre[0] }}>{{ genre[0] }}</label>
-    {% else %}
-    <input type="checkbox" name="genre" value="{{ genre[0] }}" id="{{ genre[0] }}"/>
-    <label for={{ genre[0] }}>{{ genre[0] }}</label>
-    {% endif %}
-    {% endfor %}
-</p>
-<p>
-    <a href="/addgenre">Add genre</a>
-</p>
-<p>
-    {{ error }}
-</p>
-<input type="submit" value="Save changes">
-<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-</form>
+<body>
 
-<p><a href="/book/{{ book[0] }}" >Back to book</a></p>
+    <h1>Book club</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/" >Home</a></li>
+            <li><a href="/search">Search books</a></li>
+            {% if session.user_id %}
+                <li><a href="/profile" >Your profile</a></li>
+                <li><a href="/logout">Log out</a></li>
+            {% else %}
+                <li><a href="/login" >Log in</a></li>
+                <li><a href="/signin" >Sign in</a></li>
+            {% endif %}
+
+            {% if session.user_role == 1 %}
+                <li><a href="/addbook">Add book</a></li>
+                <li><a href="/addauthor">Add author</a></li>
+                <li><a href="/addgenre">Add genre</a></li>
+                <li><a href="/users">Users</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="adminNav">
+        <ul>
+            <li><a href="/book/{{ book[0] }}" >Back to book</a></p></li>
+        </ul>
+    </div>
+
+    <h2>Modify book <i>{{ book[1] }}</i> </h2>
+
+    <form action="/book/{{ book[0] }}/modify" method="POST">
+        Title:
+        <p>
+            <input type="text" placeholder="{{ book[1] }}" name="title">
+        </p>
+        Author:
+        <p>
+            <select name="author">
+                {% for author in authors %}
+                    {% if author[0] == og_author %}
+                        <option value="{{ author[0] }}" selected>{{ author[0] }}</option>
+                    {% else %}
+                        <option value="{{ author[0] }}">{{ author[0] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <a href="/addauthor">Add author</a>
+        </p>
+        Year:
+        <p>
+            <select name="year">
+                {% for i in range(-2100,year_now+1) %}
+                    {% if 0 > i %}
+                        {% if i == book[3] %}
+                            <option value={{ i }} selected>{{ i*(-1) }} BCE</option>
+                        {% else %}
+                            <option value={{ i }}>{{ i*(-1) }} BCE</option>
+                        {% endif %}
+                    {% else%}
+                        {% if i == book[3] %}
+                            <option value={{ i }} selected>{{ i }}</option>
+                        {% else %}
+                            <option value={{ i }}>{{ i }}</option>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </p>
+        Description:
+        <p>
+            <textarea name="description" rows="10" cols="50">{{ book[4] }}</textarea>
+        </p>
+        Genres:
+        <p>
+            {% for genre in genres %}
+                {% if genre[0] in og_genres %}
+                    <input type="checkbox" name="genre" value="{{ genre[0] }}" id="{{ genre[0] }}" checked/>
+                    <label for={{ genre[0] }}>{{ genre[0] }}</label>
+                {% else %}
+                    <input type="checkbox" name="genre" value="{{ genre[0] }}" id="{{ genre[0] }}"/>
+                    <label for={{ genre[0] }}>{{ genre[0] }}</label>
+                {% endif %}
+            {% endfor %}
+        </p>
+        <p>
+            <a href="/addgenre">Add genre</a>
+        </p>
+        <p>
+            {{ error }}
+        </p>
+        <input type="submit" value="Save changes">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+
+</body>
+

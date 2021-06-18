@@ -1,101 +1,148 @@
 <!DOCTYPE html>
 
-<title>{{ book[1] }}</title>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/main.css">
+    <title>{{ book[1] }}</title>
+</head>
 
-{% if session.user_role==1 %}
-<a href="/book/{{ book[0] }}/delete">Delete book</a>
-<a href="/book/{{ book[0] }}/modify">Modify book</a>
-{% endif %}
+<body>
 
-<h1>{{ book[1] }}</h1>
-<h3>by {{ book[2] }}</h3>
-{% if book[3] > 0 %}
-<p><i>Published in {{ book[3] }}</i></p>
-{% else %}
-<p><i>Published in {{ book[3]*(-1) }} BCE</i></p>
-{% endif %}
+    <h1>Book club</h1>
 
-<p>{{ rating }} / 5</p>
+    <nav>
+        <ul>
+            <li><a href="/" >Home</a></li>
+            <li><a href="/search">Search books</a></li>
+            {% if session.user_id %}
+                <li><a href="/profile" >Your profile</a></li>
+                <li><a href="/logout">Log out</a></li>
+            {% else %}
+                <li><a href="/login" >Log in</a></li>
+                <li><a href="/signin" >Sign in</a></li>
+            {% endif %}
 
-<p>
-    {% if read and session.user_id %}
-    <form action="/book/{{ book[0] }}" method="POST">
-        <input type="radio" name="rating" value="1"> 1
-        <input type="radio" name="rating" value="2"> 2
-        <input type="radio" name="rating" value="3"> 3
-        <input type="radio" name="rating" value="4"> 4
-        <input type="radio" name="rating" value="5" checked> 5
-        <input type="submit" name="submit" value="Rate book">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
+            {% if session.user_role == 1 %}
+                <li><a href="/addbook">Add book</a></li>
+                <li><a href="/addauthor">Add author</a></li>
+                <li><a href="/addgenre">Add genre</a></li>
+                <li><a href="/users">Users</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    {% if session.user_role==1 %}
+        <div class="adminNav">
+            <ul>
+                <li><a href="/book/{{ book[0] }}/delete">Delete book</a></li>
+                <li><a href="/book/{{ book[0] }}/modify">Modify book</a></li>
+            </ul>
+        </div>
     {% endif %}
-</p>
 
-<p>
-    {% if in_list == False and session.user_id%}
-    <form acion="/book/{{ book[0] }}" method="POST">
-        <input type="radio" name="booklist" value="0" checked> I want to read this
-        <input type="radio" name="booklist" value="1"> Currently reading
-        <input type="radio" name="booklist" value="2"> I have read this
-        <input type="submit" name="submit" value="Add to booklist">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
+    <h2>{{ book[1] }}</h2>
+
+    <h3>by {{ book[2] }}</h3>
+
+    {% if book[3] > 0 %}
+        <p><i>Published in {{ book[3] }}</i></p>
+    {% else %}
+        <p><i>Published in {{ book[3]*(-1) }} BCE</i></p>
     {% endif %}
-    {% if in_list and session.user_id  %}
-    You have added this book to <a href="/profile/booklist" >your booklist</a>!
+
+    <p>{{ rating }} / 5</p>
+
+    <p>
+        {% if read and session.user_id %}
+            <form action="/book/{{ book[0] }}" method="POST">
+                <input type="radio" name="rating" value="1"> 1
+                <input type="radio" name="rating" value="2"> 2
+                <input type="radio" name="rating" value="3"> 3
+                <input type="radio" name="rating" value="4"> 4
+                <input type="radio" name="rating" value="5" checked> 5
+                <input type="submit" name="submit" value="Rate book">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            </form>
+        {% endif %}
+    </p>
+
+    <p>
+        {% if in_list == False and session.user_id%}
+            <form acion="/book/{{ book[0] }}" method="POST">
+                <input type="radio" name="booklist" value="0" checked> I want to read this
+                <input type="radio" name="booklist" value="1"> Currently reading
+                <input type="radio" name="booklist" value="2"> I have read this
+                <input type="submit" name="submit" value="Add to booklist">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            </form>
+        {% endif %}
+        {% if in_list and session.user_id  %}
+            You have added this book to <a href="/profile/booklist" >your booklist</a>!
+        {% endif %}
+    </p>
+
+    <p>{{ book[4] }}</p>
+
+    <div class="genres">
+        <ul>
+            {% for genre in genres %}
+                <li><a href="/genres/{{ genre[0] }}">{{ genre[1] }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    
+    {% if recommendations != [] %}
+        <h4>Others who have read this book have also read:</h4>
+        <div class="recommendations">
+            <ul>
+                {% for recommendation in recommendations %}
+                    <li><a href="/book/{{ recommendation[0] }}">{{ recommendation[1] }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
-</p>
 
-<p>{{ book[4] }}</p>
+    <h4>Comments:</h4>
+    <p>
+        {% if read and session.user_id and session.user_role>(-1) %}
+        <form action="/book/{{ book[0] }}" method="POST">
+            <label for="comment">Write a comment:</label>
+            <p>
+                <textarea name="comment" id="comment" rows="10" cols="50"></textarea>
+            </p>
+            <input type="submit" name="submit" value="Write a comment">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </form>
+        {% endif %}
+        {% if session.user_role==(-1) %}
+        You right to comment has been revoked.
+        {% endif %}
+    </p>
+    <p>
+        {{ error }}
+    </p>
 
-<p>
-    {% for genre in genres %}
-    <a href="/genres/{{ genre[0] }}">{{ genre[1] }}</a>
-    {% endfor %}
-</p>
-
-{% if recommendations != [] %}
-<p>Others who have read this book have also read:</p>
-{% for recommendation in recommendations %}
-<a href="/book/{{ recommendation[0] }}">{{ recommendation[1] }}</a>
-{% endfor %}
-{% endif %}
-
-
-<p><a href="/" >Back to front page</a></p>
-
-<h4>Comments:</h4>
-<p>
-    {% if read and session.user_id and session.user_role>(-1) %}
-    <form action="/book/{{ book[0] }}" method="POST">
-        <label for="comment">Write a comment:</label>
-        <p>
-            <textarea name="comment" id="comment" rows="10" cols="50"></textarea>
-        </p>
-        <input type="submit" name="submit" value="Write a comment">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
+    {% if session.user_role==1 %}
+        <form action="/book/{{ book[0] }}" method="POST">
+            {% for comment in comments %}
+                <div class="comment">
+                    <input type="checkbox" name="comment_id" value={{ comment[2] }} id="{{ comment[2] }}">
+                    <label for="{{ comment[2] }}">
+                        <b>{{ comment[0] }} :</b><p>{{ comment[1] }}</p>
+                    </label>
+                </div>
+            {% endfor %}
+            <input type="submit" name="submit" value="Delete comments">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </form>
+    {% else %}
+        {% for comment in comments %}
+            <div class="comment">
+                <p><b>{{ comment[0] }} : </b></p>
+                <p>{{ comment[1] }}</p>
+            </div>
+        {% endfor %}
     {% endif %}
-    {% if session.user_role==(-1) %}
-    You right to comment has been revoked.
-    {% endif %}
-</p>
-<p>
-    {{ error }}
-</p>
 
-{% if session.user_role==1 %}
-<form action="/book/{{ book[0] }}" method="POST">
-{% for comment in comments %}
-<input type="checkbox" name="comment_id" value={{ comment[2] }}> <b>{{ comment[0] }} : </b>
-                                                                 <p>{{ comment[1] }}</p>
-{% endfor %}
-<input type="submit" name="submit" value="Delete comments">
-<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-</form>
-{% else %}
-{% for comment in comments %}
-<p><b>{{ comment[0] }} : </b></p>
-<p>{{ comment[1] }}</p>
-{% endfor %}
-{% endif %}
+</body>

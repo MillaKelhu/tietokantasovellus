@@ -1,18 +1,48 @@
 <!DOCTYPE html>
 
-<title>Add genre</title>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/main.css">
+    <title>Add genre</title>
+</head>
 
-<form action="/addgenre" method="POST">
-<label for="name">Genre's name:</label>
-<p>
-    <input type="text" name="name" id="name">
-</p>
-<p>
-    {{ error }}
-</p>
-<input type="submit" value="Add genre">
-<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+<body>
 
-</form>
+    <h1>Book club</h1>
 
-<p><a href="/" >Back to front page</a></p>
+    <nav>
+        <ul>
+            <li><a href="/" >Home</a></li>
+            <li><a href="/search">Search books</a></li>
+            {% if session.user_id %}
+                <li><a href="/profile" >Your profile</a></li>
+                <li><a href="/logout">Log out</a></li>
+            {% else %}
+                <li><a href="/login" >Log in</a></li>
+                <li><a href="/signin" >Sign in</a></li>
+            {% endif %}
+
+            {% if session.user_role == 1 %}
+                <li><a href="/addbook">Add book</a></li>
+                <li><a href="/addauthor">Add author</a></li>
+                <li><a href="/addgenre">Add genre</a></li>
+                <li><a href="/users">Users</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <h2>Add genre</h2>
+
+    <form action="/addgenre" method="POST">
+        <label for="name">Genre's name:</label>
+        <p>
+            <input type="text" name="name" id="name">
+        </p>
+        <p>
+            {{ error }}
+        </p>
+        <input type="submit" value="Add genre">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+
+</body>

@@ -1,0 +1,25 @@
+body {
+    margin: auto;
+    max-width: 50em;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+nav li {
+    display: inline-block;
+    padding: 0 .5em;
+}
+
+.adminNav li {
+    display: inline-block;
+    padding: 0 .5em;
+}
+
+.genres li {
+    display: inline-block;
+    padding: 0 .5em;
+}
+
+.recommendations li {
+    display: inline-block;
+    padding: 0 .5em;
+}

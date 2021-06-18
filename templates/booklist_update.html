@@ -1,33 +1,75 @@
 <!DOCTYPE html>
 
-<title>Your booklist</title>
-<h1>Your booklist</h1>
-<form action="/profile/booklist/update" method="POST">
-    <p><h3>Unread:</h3></p>
-    <ul>
-        {% for book in booklist %}
-        {% if book[3] == 0 %}
-        <p><input type="checkbox" name="reading" value="{{ book[0] }}">{{ book[1] }}</p>
-        {% endif %}
-        {% endfor %}
-    </ul>
-    <p><h3>Currently reading:</h3></p>
-    <ul>
-        {% for book in booklist %}
-        {% if book[3] == 1 %}
-        <p><input type="checkbox" name="read" value="{{ book[0] }}">{{ book[1] }}</p>
-        {% endif %}
-        {% endfor %}
-    </ul>
-    <p><h3>You have read:</h3></p>
-    <ul>
-        {% for book in booklist %}
-        {% if book[3] == 2 %}
-        <li>{{ book[1] }} by {{ book[2] }}</li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-    <input type="submit" value="Save changes">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-</form>
-<p><a href="/" >Back to front page</a></p>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/main.css">
+    <title>Your booklist</title>
+</head>
+
+<body>
+
+    <h1>Book club</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/" >Home</a></li>
+            <li><a href="/search">Search books</a></li>
+            {% if session.user_id %}
+                <li><a href="/profile" >Your profile</a></li>
+                <li><a href="/logout">Log out</a></li>
+            {% else %}
+                <li><a href="/login" >Log in</a></li>
+                <li><a href="/signin" >Sign in</a></li>
+            {% endif %}
+
+            {% if session.user_role == 1 %}
+                <li><a href="/addbook">Add book</a></li>
+                <li><a href="/addauthor">Add author</a></li>
+                <li><a href="/addgenre">Add genre</a></li>
+                <li><a href="/users">Users</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <h2>Your booklist</h2>
+
+    <p>
+        Choose the books you want to move into the next section.
+    </p>
+
+    <form action="/profile/booklist/update" method="POST">
+        <p><h3>Unread:</h3></p>
+        <ul>
+            {% for book in booklist %}
+                {% if book[3] == 0 %}
+                    <p>
+                        <input type="checkbox" name="reading" value="{{ book[0] }}" id="{{ book[0] }}">
+                        <label for="{{ book[0] }}">{{ book[1] }}</label>
+                    </p>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <p><h3>Currently reading:</h3></p>
+        <ul>
+            {% for book in booklist %}
+                {% if book[3] == 1 %}
+                    <p>
+                        <input type="checkbox" name="reading" value="{{ book[0] }}" id="{{ book[0] }}">
+                        <label for="{{ book[0] }}">{{ book[1] }}</label>
+                    </p>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <p><h3>You have read:</h3></p>
+        <ul>
+            {% for book in booklist %}
+                {% if book[3] == 2 %}
+                    <li>{{ book[1] }} by {{ book[2] }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <input type="submit" value="Save changes">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+
+</body>

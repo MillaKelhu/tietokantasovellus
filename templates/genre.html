@@ -1,11 +1,42 @@
 <!DOCTYPE html>
 
-<title>{{ genre }}</title>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/main.css">
+    <title>{{ genre }}</title>
+</head>
 
-<h1>Books in genre "{{ genre }}"</h1>
+<body>
 
-<ul>
-    {% for book in books %}
-    <p><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</p>
-    {% endfor %}
-</ul>
+    <h1>Book club</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/" >Home</a></li>
+            <li><a href="/search">Search books</a></li>
+            {% if session.user_id %}
+                <li><a href="/profile" >Your profile</a></li>
+                <li><a href="/logout">Log out</a></li>
+            {% else %}
+                <li><a href="/login" >Log in</a></li>
+                <li><a href="/signin" >Sign in</a></li>
+            {% endif %}
+
+            {% if session.user_role == 1 %}
+                <li><a href="/addbook">Add book</a></li>
+                <li><a href="/addauthor">Add author</a></li>
+                <li><a href="/addgenre">Add genre</a></li>
+                <li><a href="/users">Users</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <h2>Books in genre <i>{{ genre }}</i> </h2>
+
+    <ul>
+        {% for book in books %}
+        <p><a href="/book/{{ book[0] }}" >{{ book[1] }}</a> by {{ book[2] }}</p>
+        {% endfor %}
+    </ul>
+
+</body>
