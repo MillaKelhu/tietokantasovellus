@@ -24,7 +24,7 @@
         <input type="radio" name="rating" value="2"> 2
         <input type="radio" name="rating" value="3"> 3
         <input type="radio" name="rating" value="4"> 4
-        <input type="radio" name="rating" value="5"> 5
+        <input type="radio" name="rating" value="5" checked> 5
         <input type="submit" name="submit" value="Rate book">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
@@ -34,7 +34,7 @@
 <p>
     {% if in_list == False and session.user_id%}
     <form acion="/book/{{ book[0] }}" method="POST">
-        <input type="radio" name="booklist" value="0"> I want to read this
+        <input type="radio" name="booklist" value="0" checked> I want to read this
         <input type="radio" name="booklist" value="1"> Currently reading
         <input type="radio" name="booklist" value="2"> I have read this
         <input type="submit" name="submit" value="Add to booklist">
