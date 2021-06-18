@@ -8,5 +8,6 @@ Are you sure you want to delete book {{ book[1] }}?
     <a href="/book/{{ book[0] }}">No, go back to book</a>
     <form action="/book/{{ book[0] }}/delete" method="POST">
         <input type=submit value="Yes, delete book">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
 </p>

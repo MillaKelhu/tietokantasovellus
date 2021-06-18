@@ -65,6 +65,7 @@ Genres:
     {{ error }}
 </p>
 <input type="submit" value="Save changes">
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 
 <p><a href="/book/{{ book[0] }}" >Back to book</a></p>

@@ -26,6 +26,7 @@
         <input type="radio" name="rating" value="4"> 4
         <input type="radio" name="rating" value="5"> 5
         <input type="submit" name="submit" value="Rate book">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
     {% endif %}
 </p>
@@ -37,6 +38,7 @@
         <input type="radio" name="booklist" value="1"> Currently reading
         <input type="radio" name="booklist" value="2"> I have read this
         <input type="submit" name="submit" value="Add to booklist">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
     {% endif %}
     {% if in_list and session.user_id  %}
@@ -71,6 +73,7 @@
             <textarea name="comment" id="comment" rows="10" cols="50"></textarea>
         </p>
         <input type="submit" name="submit" value="Write a comment">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
     {% endif %}
     {% if session.user_role==(-1) %}
@@ -88,6 +91,7 @@
                                                                  <p>{{ comment[1] }}</p>
 {% endfor %}
 <input type="submit" name="submit" value="Delete comments">
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 {% else %}
 {% for comment in comments %}

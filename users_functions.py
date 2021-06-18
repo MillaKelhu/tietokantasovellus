@@ -1,6 +1,7 @@
 from db import db
-from flask import session
+from flask import session, request, abort
 from werkzeug.security import check_password_hash, generate_password_hash
+import secrets
 import booklist_functions
 import review_functions
 
@@ -15,6 +16,8 @@ def log_in(username, password):
             session["user_id"] = user[0]
             session["username"] = user[1]
             session["user_role"] = user[3]
+            session["csrf_token"] = secrets.token_hex(16)
+
             return True
     
     return False
@@ -78,3 +81,7 @@ def delete_user(id):
              WHERE id =:id"""
     db.session.execute(sql, {"id":id})
     db.session.commit()
+
+def check_csrf():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)

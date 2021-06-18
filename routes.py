@@ -59,14 +59,17 @@ def book(id):
 
     if request.method=="POST":
         if request.form["submit"] == "Add to booklist":
+            users_functions.check_csrf()
             status = request.form["booklist"]
             booklist_functions.add_to_booklist(id, status)
 
         if request.form["submit"] == "Rate book":
+            users_functions.check_csrf()
             rate = request.form["rating"]
             review_functions.add_rating(id, rate)
 
         if request.form["submit"] == "Write a comment":
+            users_functions.check_csrf()
             comment = request.form["comment"]
             if comment != "":
                 if len(comment) < 500:
@@ -75,6 +78,7 @@ def book(id):
                     error = "Keep comments under 500 characters, please"
 
         if request.form["submit"] == "Delete comments":
+            users_functions.check_csrf()
             comment_ids = request.form.getlist("comment_id")
             for comment_id in comment_ids:
                 review_functions.delete_comment(comment_id)
@@ -104,6 +108,7 @@ def book_delete(id):
         book = books_functions.get_book(id)
 
         if request.method=="POST":
+            users_functions.check_csrf()
             books_functions.delete_book(id)
             return redirect("/")
         
@@ -118,6 +123,7 @@ def book_modify(id):
         year_now = datetime.datetime.now().year
 
         if request.method=="POST":
+            users_functions.check_csrf()
             title = request.form.get("title")
             author = request.form.get("author")
             year = request.form.get("year")
@@ -169,6 +175,7 @@ def profile_booklist_update():
     if users_functions.get_user():
 
         if request.method == "POST":
+            users_functions.check_csrf()
             new_currently_reading = request.form.getlist("reading")
             new_read = request.form.getlist("read")
             for id in new_currently_reading:
@@ -189,6 +196,8 @@ def add_book():
         year_now = datetime.datetime.now().year
 
         if request.method == "POST":
+            users_functions.check_csrf()
+
             title = request.form.get("title")
             author = request.form.get("author")
             year = request.form.get("year")
@@ -229,6 +238,8 @@ def add_author():
         error = ""
 
         if request.method == "POST":
+            users_functions.check_csrf()
+
             name = request.form["name"]
             if 3 < len(name) < 100:
                 author_added = books_functions.add_author(name)
@@ -250,6 +261,8 @@ def add_genre():
         error = ""
 
         if request.method == "POST":
+            users_functions.check_csrf()
+
             name = request.form["name"]
             if 1 < len(name) < 51:
                 genre_added = genre_functions.add_genre(name)
@@ -312,6 +325,7 @@ def user(id):
     if users_functions.admin():
 
         if request.method == "POST":
+            users_functions.check_csrf()
             if request.form["submit"] == "Return rights to comment":
                 users_functions.return_rights(id)
 
