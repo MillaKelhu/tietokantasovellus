@@ -50,14 +50,14 @@
 
 <p>
     {% for genre in genres %}
-    <a href="/genres/ {{ genre[0] }}">{{ genre[1] }}</a>
+    <a href="/genres/{{ genre[0] }}">{{ genre[1] }}</a>
     {% endfor %}
 </p>
 
 {% if recommendations != [] %}
 <p>Others who have read this book have also read:</p>
 {% for recommendation in recommendations %}
-<a href="/book/ {{ recommendation[0] }}">{{ recommendation[1] }}</a>
+<a href="/book/{{ recommendation[0] }}">{{ recommendation[1] }}</a>
 {% endfor %}
 {% endif %}
 
