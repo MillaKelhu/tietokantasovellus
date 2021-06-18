@@ -243,6 +243,7 @@ def add_author():
 @app.route("/addgenre", methods=["GET", "POST"])
 def add_genre():
     if users_functions.admin():
+        error = ""
 
         if request.method == "POST":
             name = request.form["name"]
