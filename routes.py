@@ -231,8 +231,12 @@ def add_author():
         if request.method == "POST":
             name = request.form["name"]
             if 3 < len(name) < 100:
-                books_functions.add_author(name)
-                return redirect("/")
+                author_added = books_functions.add_author(name)
+                if author_added:
+                    return redirect("/")
+
+                else:
+                    error = "Author already exists."
             else:
                 error = "Author's name must be 4-99 characters long."
 
